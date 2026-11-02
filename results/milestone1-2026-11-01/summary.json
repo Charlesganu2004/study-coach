@@ -1,0 +1,77 @@
+{
+  "cases_per_run": 50,
+  "chosen_profile": "groq-120b",
+  "complete": true,
+  "experiment_fingerprint": "fnv1a64:497603742b808c6a",
+  "milestone_complete": true,
+  "models": [
+    {
+      "api_errors": 0,
+      "average_response_ms": 862.5808993333329,
+      "cost_condition": "Only while requests are covered by the provider's free account limits; billing not independently verified",
+      "estimated_usd_per_1000_free_tier": 0.0,
+      "expected_requests": 150,
+      "model": "openai/gpt-oss-20b",
+      "passed": 119,
+      "profile": "groq-20b",
+      "provider": "groq",
+      "recorded_requests": 150,
+      "run_scores_percent": [
+        80.0,
+        80.0,
+        78.0
+      ],
+      "score_is_final": true,
+      "score_max_percent": 80.0,
+      "score_min_percent": 78.0,
+      "score_percent": 79.33333333333333,
+      "successful_requests": 150
+    },
+    {
+      "api_errors": 0,
+      "average_response_ms": 898.8308413333332,
+      "cost_condition": "Only while requests are covered by the provider's free account limits; billing not independently verified",
+      "estimated_usd_per_1000_free_tier": 0.0,
+      "expected_requests": 150,
+      "model": "openai/gpt-oss-120b",
+      "passed": 128,
+      "profile": "groq-120b",
+      "provider": "groq",
+      "recorded_requests": 150,
+      "run_scores_percent": [
+        86.0,
+        86.0,
+        84.0
+      ],
+      "score_is_final": true,
+      "score_max_percent": 86.0,
+      "score_min_percent": 84.0,
+      "score_percent": 85.33333333333333,
+      "successful_requests": 150
+    },
+    {
+      "api_errors": 0,
+      "average_response_ms": 20853.720773333327,
+      "cost_condition": "Only while requests are covered by the provider's free account limits; billing not independently verified",
+      "estimated_usd_per_1000_free_tier": 0.0,
+      "expected_requests": 150,
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "passed": 125,
+      "profile": "nvidia-lightning",
+      "provider": "nvidia",
+      "recorded_requests": 150,
+      "run_scores_percent": [
+        86.0,
+        82.0,
+        82.0
+      ],
+      "score_is_final": true,
+      "score_max_percent": 86.0,
+      "score_min_percent": 82.0,
+      "score_percent": 83.33333333333333,
+      "successful_requests": 150
+    }
+  ],
+  "runs_per_model": 3,
+  "selection_rule": "Highest mean strict pass rate, then lowest mean successful response latency; only complete error-free experiments are eligible"
+}

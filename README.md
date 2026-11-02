@@ -6,7 +6,7 @@ This is a standalone project with its own Git repository. Local folder: `C:\User
 
 GitHub repository: [Charlesganu2004/study-coach-rust](https://github.com/Charlesganu2004/study-coach-rust) (private).
 
-Milestone 1 implementation: 50 examples, deterministic scoring, three model profiles, three runs per model, latency capture, conditional free-tier cost reporting, and saved responses. **Live model comparison is pending local API credentials.** See [REPORT.md](REPORT.md) for the exact status. No benchmark scores have been fabricated.
+Milestone 1 evaluation is complete locally: 50 examples, three runs per model, 450 unique completed API responses, measured scores/latency, conditional free-tier cost reporting, and saved evidence. **Selected model: Groq `openai/gpt-oss-120b`**, with 85.33% strict passes and 0.899-second mean completed-call latency. See [REPORT.md](REPORT.md) for all results, failure analyses, limitations, and remaining submission steps.
 
 ## Install and check
 
@@ -45,18 +45,18 @@ GROQ_API_KEY=
 NVIDIA_API_KEY=
 ```
 
-Fresh clones can copy `.env.example` to `.env`. The app loads `.env` automatically; no additional dependency is needed. Nonempty process environment values take precedence over `.env.local`, which takes precedence over `.env`. Blank values do not mask populated values from a lower-priority file. Both credential files are ignored by Git. Never paste credentials into chat, model inputs, or result files.
+Fresh clones can create `.env` with the two entries shown above, or run `scripts/configure-keys.ps1` for hidden local prompts. The app loads `.env` automatically; no additional dependency is needed. Nonempty process environment values take precedence over `.env.local`, which takes precedence over `.env`. Blank values do not mask populated values from a lower-priority file. Both credential files are ignored by Git. Never paste credentials into chat, model inputs, or result files.
 
 ## Ask one question
 
 ```powershell
-.\scripts\coach.ps1 answer --model groq-20b --question "How does a unit test differ from an integration test?"
+.\scripts\coach.ps1 answer --model groq-120b --question "How does a unit test differ from an integration test?"
 ```
 
 Portable equivalent:
 
 ```sh
-cargo run --locked --release -- answer --model groq-20b --question "How does a unit test differ from an integration test?"
+cargo run --locked --release -- answer --model groq-120b --question "How does a unit test differ from an integration test?"
 ```
 
 The reusable library function is `study_coach::core::answer(input, notes, settings)`. It takes one user question plus shared course/configuration context, calls the selected model, and returns response text, parsed JSON when valid, latency, attempts, and token usage when supplied. The CLI and evaluator call this same function. A future interface can use it too.
@@ -106,7 +106,7 @@ Switch profiles without editing code:
 
 Available aliases and shared sampling settings live in [models.json](models.json). Common settings: temperature 0.2, top-p 1.0, maximum output allocation 2,048 tokens, nonstreaming responses, and the same prompt and notes. Provider APIs use different token-limit field names. Internal reasoning defaults may differ; Groq's hidden reasoning is excluded from displayed text but still may consume tokens. No tools, web search, or paid fallback are enabled.
 
-## Read results and finish the report
+## Read completed results
 
 Each experiment directory contains `manifest.json`, `records.jsonl`, `summary.json`, and `MODEL_SELECTION.md`. The manifest identifies the code/configuration/data snapshot with a noncryptographic consistency fingerprint. Raw responses, criteria failures, latencies, usage, and API errors remain inspectable. Keep results you submit in Git explicitly because generated result directories are ignored by default:
 
@@ -114,7 +114,7 @@ Each experiment directory contains `manifest.json`, `records.jsonl`, `summary.js
 git add -f results/YOUR_RUN_DIRECTORY
 ```
 
-Review `MODEL_SELECTION.md`, inspect its actual failed outputs, and incorporate measured results and your analysis into `REPORT.md`. If fewer than three distinct failures occur, report that count honestly and inspect the most challenging cases instead of inventing failures. The generator recommends a profile only after the experiment completes without API errors. Highest strict pass rate wins; mean response latency breaks ties.
+The completed baseline is [results/milestone1-2026-11-01](results/milestone1-2026-11-01/summary.json). `REPORT.md` contains its final table and three inspected application failures, including a task-completion error missed by the rubric. `VERIFICATION.json` independently checks all 450 unique results. Nine earlier NVIDIA timeout outcomes remain in the ledger; completed-call latency excludes those earlier waits. The generator recommends a profile only after all expected responses are present with no outstanding API errors. Highest strict pass rate wins; mean response latency breaks ties.
 
 The reported $0/1,000 requests is conditional on requests being covered by free account quotas. It is not an unlimited-use price or independently verified billing record. CPU/network/electricity costs are excluded. The selected models are open-weight, even though this application uses cloud inference. GPT-OSS uses Apache 2.0; NVIDIA's model card supplies its weight license. [OpenAI release](https://openai.com/index/introducing-gpt-oss/), [NVIDIA model card](https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16).
 

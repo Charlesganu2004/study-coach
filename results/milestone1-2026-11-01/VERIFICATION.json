@@ -1,0 +1,68 @@
+{
+  "CoverageValid": true,
+  "UniqueCompletedResponses": 450,
+  "RecordedCallOutcomes": 459,
+  "HistoricalInterruptedOutcomes": 9,
+  "InterruptionKinds": [
+    {
+      "Name": "nvidia-lightning, Provider request timed out.",
+      "Count": 9
+    }
+  ],
+  "Models": [
+    {
+      "Profile": "groq-20b",
+      "Responses": 150,
+      "Passed": 119,
+      "ScorePercent": 79.333333,
+      "RunScoresPercent": [
+        80.0,
+        80.0,
+        78.0
+      ],
+      "Minimum": 78.0,
+      "Maximum": 80.0,
+      "MeanResponseMs": 862.580899333333,
+      "EmptyFinalResponses": 0,
+      "EmptyAt2048Tokens": 0,
+      "InputTokens": 139338.0,
+      "OutputTokens": 29540.0
+    },
+    {
+      "Profile": "groq-120b",
+      "Responses": 150,
+      "Passed": 128,
+      "ScorePercent": 85.333333,
+      "RunScoresPercent": [
+        86.0,
+        86.0,
+        84.0
+      ],
+      "Minimum": 84.0,
+      "Maximum": 86.0,
+      "MeanResponseMs": 898.8308413333333,
+      "EmptyFinalResponses": 0,
+      "EmptyAt2048Tokens": 0,
+      "InputTokens": 139338.0,
+      "OutputTokens": 32111.0
+    },
+    {
+      "Profile": "nvidia-lightning",
+      "Responses": 150,
+      "Passed": 125,
+      "ScorePercent": 83.333333,
+      "RunScoresPercent": [
+        86.0,
+        82.0,
+        82.0
+      ],
+      "Minimum": 82.0,
+      "Maximum": 86.0,
+      "MeanResponseMs": 20853.720773333334,
+      "EmptyFinalResponses": 11,
+      "EmptyAt2048Tokens": 11,
+      "InputTokens": 137061.0,
+      "OutputTokens": 213416.0
+    }
+  ]
+}

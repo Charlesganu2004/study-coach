@@ -1,0 +1,66 @@
+{
+  "case_count": 50,
+  "created_unix_seconds": 1793585810,
+  "fingerprint": "fnv1a64:497603742b808c6a",
+  "library_version": "0.1.0",
+  "profiles": [
+    {
+      "free_access_source": "https://console.groq.com/docs/rate-limits",
+      "min_interval_ms": 25000,
+      "model": "openai/gpt-oss-20b",
+      "name": "groq-20b",
+      "provider": "groq",
+      "weights_source": "https://openai.com/index/introducing-gpt-oss/"
+    },
+    {
+      "free_access_source": "https://console.groq.com/docs/rate-limits",
+      "min_interval_ms": 25000,
+      "model": "openai/gpt-oss-120b",
+      "name": "groq-120b",
+      "provider": "groq",
+      "weights_source": "https://openai.com/index/introducing-gpt-oss/"
+    },
+    {
+      "free_access_source": "https://build.nvidia.com/nvidia/nemotron-3.5-lightning-30b-a3b",
+      "min_interval_ms": 3000,
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "name": "nvidia-lightning",
+      "provider": "nvidia",
+      "weights_source": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16"
+    }
+  ],
+  "runs": 3,
+  "schema_version": 1,
+  "settings": {
+    "max_tokens": 2048,
+    "profiles": [
+      {
+        "free_access_source": "https://console.groq.com/docs/rate-limits",
+        "min_interval_ms": 25000,
+        "model": "openai/gpt-oss-20b",
+        "name": "groq-20b",
+        "provider": "groq",
+        "weights_source": "https://openai.com/index/introducing-gpt-oss/"
+      },
+      {
+        "free_access_source": "https://console.groq.com/docs/rate-limits",
+        "min_interval_ms": 25000,
+        "model": "openai/gpt-oss-120b",
+        "name": "groq-120b",
+        "provider": "groq",
+        "weights_source": "https://openai.com/index/introducing-gpt-oss/"
+      },
+      {
+        "free_access_source": "https://build.nvidia.com/nvidia/nemotron-3.5-lightning-30b-a3b",
+        "min_interval_ms": 3000,
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "name": "nvidia-lightning",
+        "provider": "nvidia",
+        "weights_source": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16"
+      }
+    ],
+    "retries": 2,
+    "temperature": 0.2,
+    "timeout_seconds": 120
+  }
+}

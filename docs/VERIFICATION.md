@@ -1,8 +1,8 @@
 # Local verification receipt
 
-Date: November 1, 2026, America/Chicago. Working directory: this project's root. No live Groq or NVIDIA requests were made.
+Date: November 1, 2026, America/Chicago. Working directory: this project's root. Initial checks below ran before credentials were configured; the later live evaluation is documented separately in this receipt.
 
-## Checks actually run
+## Initial offline checks actually run
 
 | Command | Observed result |
 |---|---|
@@ -37,6 +37,18 @@ After relocation to `C:\Users\Charl\Downloads\study-coach-rust`, one cached inte
 
 Dependency review is recorded separately in [DEPENDENCY_AUDIT.md](DEPENDENCY_AUDIT.md). Microsoft Defender remained enabled.
 
-## Still unverified
+## Live evaluation after credentials were configured
 
-Provider authentication, actual free-account eligibility, model quality, provider response compatibility, real latency, usage/billing, three repeated model comparisons, final selection, and three observed chosen-model failures. The exact external blocker is absent `GROQ_API_KEY` and `NVIDIA_API_KEY`; keys must be entered locally by the student. `REPORT.md` explicitly marks these results as not measured.
+- All three configured models passed a real one-case API smoke test.
+- The frozen comparison completed 450 unique API responses: 50 cases, three models, three runs per model. The ledger retains nine earlier timeout outcomes as well, for 459 recorded outcomes.
+- `scripts/coach.ps1 summarize --out results/milestone1-2026-11-01` exited 0 and printed `milestone_complete=true`.
+- Independent aggregation checked every expected case ID in all nine model/run groups and matched all means, ranges, and latencies in the Rust summary. Its output is `results/milestone1-2026-11-01/VERIFICATION.json`.
+- Groq 20B: 119/150 strict passes, 79.33% mean, 78%–80% range, 0.863-second mean completed-call latency.
+- Groq 120B: 128/150 strict passes, 85.33% mean, 84%–86% range, 0.899-second mean completed-call latency. Selected model.
+- NVIDIA: 125/150 strict passes, 83.33% mean, 82%–86% range, 20.854-second mean completed-call latency.
+- All nine timeout outcomes were on NVIDIA requests and were recovered from checkpoints. Their failed-call durations were not saved and are excluded from completed-call latency. Eleven NVIDIA final responses were empty, all at 2,048 reported completion tokens; these remain rubric failures.
+- `REPORT.md` contains three observed application failures in the selected model, with links to raw evidence. One of those failures was a rubric false pass. Strict pass rate is not factual accuracy.
+
+## Remaining limits
+
+Account billing/free-tier eligibility is not independently verified; estimated $0/1,000 applies only within provider-covered free quotas. Provider finish reasons and individual failed-call durations were not captured. Real classroom learning outcomes and performance on an unseen final test set remain unmeasured. A UI and material import are later development work, outside the supplied Milestone 1 requirements. Updated local report/results still need to be committed and pushed before course submission.

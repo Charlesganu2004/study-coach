@@ -16,7 +16,7 @@ Verification: `cargo fmt --check`, `cargo check --locked`, `cargo clippy --locke
 
 Stop only when all deliverables are verified, or name the exact external blocker. Missing credentials block live measurement and model selection, not local implementation and testing.
 
-Progress: steps 1–4 implemented and checked locally. Step 5 remains blocked because `GROQ_API_KEY` and `NVIDIA_API_KEY` are absent. No model scores, selection, or observed failure analyses are claimed. The README includes local credential setup and the full evaluation/resume command.
+Progress: all five steps complete locally. All three models completed three 50-case runs. Independent aggregation confirms 450 unique final responses and nine retained timeout outcomes. Groq GPT-OSS 120B is selected at 85.33% strict passes and 0.899-second mean completed-call latency. The final table, method, iteration log, and three observed application failures are in `REPORT.md`. Updated files and result evidence still need to be committed and pushed for submission; `.env` remains local.
 
 Follow-up: move the new, uncommitted project out of the class repository to `C:\Users\Charl\Downloads\study-coach-rust`, add an ignored blank `.env` with automatic loading, initialize an independent repository, verify the full suite and staged files, then create and populate its private GitHub repository under `Charlesganu2004`.
 
