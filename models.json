@@ -1,0 +1,32 @@
+{
+  "temperature": 0.2,
+  "max_tokens": 2048,
+  "timeout_seconds": 120,
+  "retries": 2,
+  "profiles": [
+    {
+      "name": "groq-20b",
+      "provider": "groq",
+      "model": "openai/gpt-oss-20b",
+      "min_interval_ms": 25000,
+      "free_access_source": "https://console.groq.com/docs/rate-limits",
+      "weights_source": "https://openai.com/index/introducing-gpt-oss/"
+    },
+    {
+      "name": "groq-120b",
+      "provider": "groq",
+      "model": "openai/gpt-oss-120b",
+      "min_interval_ms": 25000,
+      "free_access_source": "https://console.groq.com/docs/rate-limits",
+      "weights_source": "https://openai.com/index/introducing-gpt-oss/"
+    },
+    {
+      "name": "nvidia-lightning",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "min_interval_ms": 3000,
+      "free_access_source": "https://build.nvidia.com/nvidia/nemotron-3.5-lightning-30b-a3b",
+      "weights_source": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16"
+    }
+  ]
+}

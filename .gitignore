@@ -1,0 +1,6 @@
+/target/
+/.env
+/.env.local
+/results/*
+!/results/README.md
+!/results/baseline-status.json

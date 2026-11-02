@@ -1,0 +1,20 @@
+{
+  "date_local": "2026-11-01",
+  "timezone": "America/Chicago",
+  "status": "blocked_missing_credentials",
+  "project": "Source-grounded study coach",
+  "language": "Rust",
+  "evaluation_cases": 50,
+  "course_sources": 12,
+  "configured_models": 3,
+  "planned_runs_per_model": 3,
+  "planned_model_requests": 450,
+  "completed_live_requests": 0,
+  "selected_model": null,
+  "model_scores": null,
+  "blocking_prerequisites": ["GROQ_API_KEY", "NVIDIA_API_KEY"],
+  "preflight_output": "Missing local credentials: GROQ_API_KEY, NVIDIA_API_KEY. No API calls made.",
+  "verified_local_tests": 40,
+  "rubric_check": "50/50 reference answers pass. This is not a model result.",
+  "experiment_fingerprint": "fnv1a64:497603742b808c6a"
+}
