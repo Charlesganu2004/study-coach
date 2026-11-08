@@ -1,0 +1,81 @@
+{
+  "date": "2026-11-08",
+  "result": "PASS",
+  "unique_responses": 150,
+  "rows": [
+    {
+      "approach": "baseline_full",
+      "model": "openai/gpt-oss-120b",
+      "cases": 50,
+      "runs": 1,
+      "passed": 39,
+      "score_percent": 78,
+      "mean_model_response_ms": 923.994236,
+      "mean_input_tokens": 928.92,
+      "mean_output_tokens": 228.72,
+      "estimated_usd_per_1000_requests": 0,
+      "cost_condition": "Only while requests are covered by the provider's free account limits; billing not independently verified"
+    },
+    {
+      "approach": "grounded_full",
+      "model": "openai/gpt-oss-120b",
+      "cases": 50,
+      "runs": 1,
+      "passed": 43,
+      "score_percent": 86,
+      "mean_model_response_ms": 1002.046908,
+      "mean_input_tokens": 1076.92,
+      "mean_output_tokens": 237.6,
+      "estimated_usd_per_1000_requests": 0,
+      "cost_condition": "Only while requests are covered by the provider's free account limits; billing not independently verified"
+    },
+    {
+      "approach": "grounded_retrieval",
+      "model": "openai/gpt-oss-120b",
+      "cases": 50,
+      "runs": 1,
+      "passed": 43,
+      "score_percent": 86,
+      "mean_model_response_ms": 932.763154,
+      "mean_input_tokens": 688.92,
+      "mean_output_tokens": 210.96,
+      "estimated_usd_per_1000_requests": 0,
+      "cost_condition": "Only while requests are covered by the provider's free account limits; billing not independently verified",
+      "mean_retrieval_ms": 0.157926,
+      "mean_end_to_end_response_ms": 932.92108
+    }
+  ],
+  "paired_changes": {
+    "baseline_full_vs_grounded_full": {
+      "failed_then_passed": [
+        "E09",
+        "E20",
+        "E30",
+        "E32",
+        "E45",
+        "E50"
+      ],
+      "passed_then_failed": [
+        "E13",
+        "E14"
+      ]
+    },
+    "grounded_full_vs_grounded_retrieval": {
+      "failed_then_passed": [
+        "E06"
+      ],
+      "passed_then_failed": [
+        "E09"
+      ]
+    }
+  },
+  "controlled_fields_equal": [
+    "dataset",
+    "notes",
+    "scorer",
+    "generation settings"
+  ],
+  "grounded_prompt_equal_for_retrieval_comparison": true,
+  "mean_input_token_reduction_percent": 36.02867436764106,
+  "limitation": "One run per arm on a visible development set. Concurrent streams and provider variation preclude a causal latency claim."
+}

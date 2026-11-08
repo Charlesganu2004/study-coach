@@ -1,0 +1,3 @@
+"approach","model","cases_per_run","runs","passed","completed_requests","score_percent","score_min_percent","score_max_percent","average_response_ms","estimated_usd_per_1000_free_tier","cost_condition","fingerprint","evidence"
+"baseline","openai/gpt-oss-120b","50","1","39","50","78","78","78","923.9942360000001","0","Only while requests are covered by the provider's free account limits; billing not independently verified","fnv1a64:14be9f0f70763eff","baseline/records.jsonl"
+"grounded","openai/gpt-oss-120b","50","1","43","50","86","86","86","1002.0469079999998","0","Only while requests are covered by the provider's free account limits; billing not independently verified","fnv1a64:217527e9dadddcf1","grounded/records.jsonl"

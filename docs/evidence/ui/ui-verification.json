@@ -1,0 +1,24 @@
+{
+  "checks": [
+    "fresh setup",
+    "private blank credentials",
+    "source persistence",
+    "source text inert",
+    "Markdown import",
+    "source removal",
+    "history empty state",
+    "dummy key saved without readback",
+    "local nonsense handling",
+    "answer fixture rendering",
+    "quota error fixture",
+    "390px overflow",
+    "keyboard focus",
+    "no browser exceptions",
+    "system reduced motion respected",
+    "3D transform changes during animation",
+    "high density canvas",
+    "motion toggle persists after reload"
+  ],
+  "actual_provider_call": false,
+  "screenshot_directory": "C:\\Users\\Charl\\Downloads\\study-coach-rust\\docs\\evidence\\ui"
+}

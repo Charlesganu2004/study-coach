@@ -1,0 +1,27 @@
+{
+  "date": "2026-11-08",
+  "result": "PASS",
+  "browser": "Official Playwright; installed Microsoft Edge on Windows",
+  "actual_provider_call": true,
+  "api_answer_requests": 1,
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "approach": "grounded",
+  "context_mode": "full",
+  "latency_ms": 964.4914,
+  "verified_citations": [
+    {
+      "quote": "A unit test checks one function in isolation.",
+      "source_id": "S3"
+    }
+  ],
+  "answer": "A unit test is a test that checks one function in isolation.",
+  "history_click_restored_answer": true,
+  "history_click_additional_api_calls": 0,
+  "javascript_errors": 0,
+  "phone_horizontal_overflow": false,
+  "keys_entered_in_browser": false,
+  "process_credentials_not_persisted": true,
+  "original_credentials_file_unchanged": true,
+  "device_scale_factor": 2
+}

@@ -1,0 +1,179 @@
+1
+00:00:00,000 --> 00:00:05,000
+Study Coach turns saved notes
+into explanations and practice.
+
+2
+00:00:05,000 --> 00:00:10,000
+This is the working Rust application,
+with a browser workspace.
+
+3
+00:00:10,000 --> 00:00:15,000
+Notes and history stay on this computer.
+Asking sends source text to a provider.
+
+4
+00:00:15,000 --> 00:00:20,000
+The comparison used the same 50 cases.
+Each new configuration ran once.
+
+5
+00:00:20,000 --> 00:00:25,000
+The baseline scored 78%.
+The revised prompt scored 86%.
+
+6
+00:00:25,000 --> 00:00:30,000
+Retrieval also scored 86%, using
+36.03% fewer mean input tokens.
+
+7
+00:00:30,000 --> 00:00:35,000
+Find the Test scope source
+in the source panel.
+
+8
+00:00:35,000 --> 00:00:40,000
+The source panel exposes the notes
+available for answering.
+
+9
+00:00:40,000 --> 00:00:45,000
+An exact quotation must match
+an original source passage.
+
+10
+00:00:45,000 --> 00:00:50,000
+Bring the original source passage
+into view before asking.
+
+11
+00:00:50,000 --> 00:00:55,000
+Ask: How does a unit test differ
+from an integration test?
+
+12
+00:00:55,000 --> 00:01:00,000
+This question uses the same
+Rust core as the evaluator.
+
+13
+00:01:00,000 --> 00:01:05,000
+Ask Study Coach to send this question
+to the selected Groq 120B model.
+
+14
+00:01:05,000 --> 00:01:10,000
+Wait for the provider response.
+This is a real model request.
+
+15
+00:01:10,000 --> 00:01:15,000
+The response now includes an explanation
+and source evidence.
+
+16
+00:01:15,000 --> 00:01:20,000
+Read the explanation alongside
+the source quotation.
+
+17
+00:01:20,000 --> 00:01:25,000
+The app checks that each quotation
+appears in its named source.
+
+18
+00:01:25,000 --> 00:01:30,000
+An exact quote is checkable evidence.
+It does not prove every answer claim.
+
+19
+00:01:30,000 --> 00:01:35,000
+Next, test unclear input:
+three question marks.
+
+20
+00:01:35,000 --> 00:01:40,000
+Try three question marks
+instead of a meaningful study question.
+
+21
+00:01:40,000 --> 00:01:45,000
+An unclear question needs guidance
+before a source based answer.
+
+22
+00:01:45,000 --> 00:01:50,000
+For punctuation only input,
+a local clarification is enough.
+
+23
+00:01:50,000 --> 00:01:55,000
+The app asks for a clearer question.
+No model request is needed.
+
+24
+00:01:55,000 --> 00:02:00,000
+Open My notes to add original material
+to the local source library.
+
+25
+00:02:00,000 --> 00:02:05,000
+Give the new source a title
+and paste the short test scope passage.
+
+26
+00:02:05,000 --> 00:02:10,000
+Save Demo notes to make this source
+available for the next question.
+
+27
+00:02:10,000 --> 00:02:15,000
+The saved source now has a stable ID
+in the local library.
+
+28
+00:02:15,000 --> 00:02:20,000
+Open Past questions to revisit
+an earlier accepted answer.
+
+29
+00:02:20,000 --> 00:02:25,000
+History keeps the question, response,
+and evidence on this computer.
+
+30
+00:02:25,000 --> 00:02:30,000
+Choose the saved question
+to restore its explanation and evidence.
+
+31
+00:02:30,000 --> 00:02:35,000
+The saved answer returns without
+another model request.
+
+32
+00:02:35,000 --> 00:02:40,000
+Connections lets users choose a model
+and enter their own provider keys.
+
+33
+00:02:40,000 --> 00:02:45,000
+The key fields stay blank on this screen.
+Saved keys are not returned here.
+
+34
+00:02:45,000 --> 00:02:50,000
+Groq and NVIDIA offer limited free access.
+There is no automatic paid fallback.
+
+35
+00:02:50,000 --> 00:02:55,000
+Return to Study to keep learning
+from the saved notes.
+
+36
+00:02:55,000 --> 00:03:00,000
+One run on visible development cases.
+These results do not measure learning.

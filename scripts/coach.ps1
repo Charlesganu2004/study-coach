@@ -20,7 +20,7 @@ if ($env:OS -eq 'Windows_NT' -and -not (Get-Command link.exe -ErrorAction Silent
 }
 Push-Location -LiteralPath $CoachRoot
 try {
-    & $CoachCargoPath @CoachToolchain run --locked --release -- @CoachArguments
+    & $CoachCargoPath @CoachToolchain run --locked --release --bin study-coach -- @CoachArguments
     $CoachExitCode = $LASTEXITCODE
 } finally {
     Pop-Location

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Study Coach</title>
+  <link rel="stylesheet" href="/app.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <canvas id="depth-field" aria-hidden="true"></canvas>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+  <a class="skip" href="#main">Skip to workspace</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Workspace navigation">
+      <a class="brand" href="#study" aria-label="Study Coach home"><span class="brand-mark" aria-hidden="true">sc.</span><span>Study Coach<small>From notes to understanding</small></span></a>
+      <nav class="nav">
+        <button class="nav-item active" data-page="study" aria-current="page"><span aria-hidden="true">01</span>Study</button>
+        <button class="nav-item" data-page="notes"><span aria-hidden="true">02</span>My notes <span class="count" id="note-count">0</span></button>
+        <button class="nav-item" data-page="history"><span aria-hidden="true">03</span>Past questions</button>
+        <button class="nav-item" data-page="settings"><span aria-hidden="true">04</span>Connections</button>
+      </nav>
+      <div class="sidebar-bottom"><span class="local-dot" aria-hidden="true"></span> Saved on this computer<p>Cloud models receive your question and notes when you ask.</p><span id="version" class="version"></span></div>
+    </aside>
+    <main id="main" tabindex="-1">
+      <header class="topbar"><span id="page-label">Your study workspace</span><div class="topbar-tools"><button id="motion-toggle" class="motion-toggle" type="button" aria-pressed="false">Motion on</button><span id="connection-status" class="connection">Connecting…</span></div></header>
+      <div id="global-error" class="notice error" role="alert" hidden></div>
+
+      <section id="page-study" class="page" aria-labelledby="study-title">
+        <div class="page-heading study-heading"><div class="hero-copy"><p class="eyebrow"><span class="signal-bars" aria-hidden="true"><i></i><i></i><i></i></span> Your next breakthrough starts here</p><h1 id="study-title">Make knowledge<br><em>click.</em></h1><p>Go deeper into your notes. Connect an idea, test your understanding, and trace every answer back to its source.</p></div><div class="study-orbit" aria-hidden="true"><div class="orbit-halo"></div><div class="orbital-system"><div class="orbital-ring ring-one"></div><div class="orbital-ring ring-two"></div><div class="orbital-ring ring-three"></div><div class="knowledge-cube"><span class="cube-face face-front">sc.</span><span class="cube-face face-back">sc.</span><span class="cube-face face-left">?</span><span class="cube-face face-right">↗</span><span class="cube-face face-top">+</span><span class="cube-face face-bottom">+</span></div><span class="satellite satellite-one"></span><span class="satellite satellite-two"></span></div><span class="orbit-label label-one">FIND THE CONNECTION</span><span class="orbit-label label-two">FOLLOW THE EVIDENCE</span><span class="orbit-caption">A little curiosity. A new dimension.</span></div></div>
+        <div id="setup-notice" class="notice" hidden><div><strong>Connect a model to get started.</strong><p>Use your own Groq or NVIDIA key. Free account limits apply.</p></div><button class="button small" data-page="settings">Set up connection</button></div>
+        <div class="study-grid">
+          <div class="question-column">
+            <form id="question-form" class="question-card">
+              <label for="question">Your question</label>
+              <textarea id="question" rows="5" maxlength="4000" placeholder="How are precision and recall different?" required aria-describedby="question-help"></textarea>
+              <div class="question-footer"><span id="question-help">Answers use your saved notes.</span><button id="ask-button" class="button" type="submit">Ask Study Coach <span aria-hidden="true">↗</span></button></div>
+            </form>
+            <div class="suggestions" aria-label="Try a question"><span>Try</span><button data-question="How are precision and recall different?">Compare two ideas</button><button data-question="Make one short question about unit tests and give its answer, based only on these notes.">Quiz me</button><button data-question="What should I do when precision has a zero denominator?">Work through an edge case</button></div>
+            <div id="answer-loading" class="loading-state" role="status" hidden><span class="spinner" aria-hidden="true"></span><div><strong>Reading your notes…</strong><p>Some models take a little longer. Keep this window open.</p></div></div>
+            <div id="answer-error" class="notice error" role="alert" hidden></div>
+            <article id="answer-card" class="answer-card" aria-labelledby="answer-heading" hidden><div class="answer-top"><h2 id="answer-heading">Your answer</h2><span id="answer-status" class="pill"></span></div><div id="answer-text" class="answer-text"></div><div id="citations" class="citations"></div><footer class="answer-meta"><span id="answer-meta"></span><button id="copy-answer" class="text-button" type="button">Copy answer</button></footer></article>
+            <div id="answer-empty" class="answer-empty"><span class="line-art" aria-hidden="true">“</span><h2>Understanding starts with a question.</h2><p>Your answer and its source passages will appear here. If the notes do not cover something, the coach will say so.</p></div>
+          </div>
+          <aside class="context-panel" aria-labelledby="context-title"><div class="section-heading"><h2 id="context-title">On your desk</h2><button class="text-button" data-page="notes">Manage notes</button></div><p class="muted">These are the sources your model can use.</p><div id="context-sources"></div><div class="context-foot"><strong>Read the original.</strong><p>A citation checks a quotation, not every claim. Use your judgment and compare the answer with your notes.</p></div></aside>
+        </div>
+      </section>
+
+      <section id="page-notes" class="page" aria-labelledby="notes-title" hidden>
+        <div class="page-heading"><p class="eyebrow">Your source material</p><h1 id="notes-title">Make room for your notes.</h1><p>Paste a passage or import a plain text or Markdown file. Saved notes stay on this computer until you ask a cloud model a question.</p></div>
+        <div class="notes-grid"><form id="note-form" class="panel"><h2>Add a source</h2><label for="note-title">Title</label><input id="note-title" maxlength="160" required placeholder="Week 3 · evaluation notes"><label for="note-text">Notes</label><textarea id="note-text" rows="10" maxlength="16384" required placeholder="Paste the material you want to study…"></textarea><div class="form-actions"><label class="file-button" for="note-file">Import .txt or .md<input type="file" id="note-file" accept=".txt,.md,text/plain,text/markdown"></label><button id="save-note" class="button" type="submit">Save source</button></div><p class="field-hint">Text only, up to 16 KiB per source. Split long material into smaller sources.</p><div id="note-message" role="status" hidden></div></form><div><div class="section-heading"><h2>Saved sources</h2><span id="source-total" class="muted"></span></div><div id="note-list" class="note-list"></div></div></div>
+      </section>
+
+      <section id="page-history" class="page" aria-labelledby="history-title" hidden>
+        <div class="page-heading"><p class="eyebrow">Pick up where you left off</p><h1 id="history-title">Past questions.</h1><p>Saved on this computer. Open a response to revisit its explanation and evidence.</p></div><div id="history-list" class="history-list"></div>
+      </section>
+
+      <section id="page-settings" class="page" aria-labelledby="settings-title" hidden>
+        <div class="page-heading"><p class="eyebrow">Choose how you study</p><h1 id="settings-title">Your model connection.</h1><p>Bring a key from a free account. Keys are saved by the local service and never returned to this screen.</p></div>
+        <div class="settings-grid"><form id="settings-form" class="panel"><h2>Model and access</h2><label for="profile">Study model</label><select id="profile"></select><p class="field-hint">Groq GPT OSS 120B was selected in the project evaluation. Changing the model can change response quality and speed.</p><label for="groq-key">Groq API key <span id="groq-key-state" class="key-state"></span></label><input type="password" id="groq-key" autocomplete="new-password" spellcheck="false" placeholder="Paste a new key to save it" maxlength="4096"><p class="field-hint"><a href="https://console.groq.com/keys" target="_blank" rel="noreferrer noopener">Get a Groq key ↗</a> · Select a free account. Leave blank to keep your saved key.</p><label for="nvidia-key">NVIDIA API key <span id="nvidia-key-state" class="key-state"></span></label><input type="password" id="nvidia-key" autocomplete="new-password" spellcheck="false" placeholder="Paste a new key to save it" maxlength="4096"><p class="field-hint"><a href="https://build.nvidia.com/nvidia/nemotron-3.5-lightning-30b-a3b" target="_blank" rel="noreferrer noopener">Get an NVIDIA key ↗</a> · Look for Free Endpoint access.</p><button class="button" id="save-settings" type="submit">Save connection</button><div id="settings-message" role="status" hidden></div></form><aside class="settings-notes"><h2>A few things to know.</h2><details open><summary>Free access has limits</summary><p>Groq and NVIDIA provide free access subject to account eligibility and quotas. Check your provider console. This app does not enable billing, switch to paid endpoints, or guarantee free access forever.</p></details><details><summary>Where your keys live</summary><p id="key-location">In a private .env file in this app’s data folder.</p><p>This is a local credential file, not an encrypted vault. You can edit it after closing the app. Never share it.</p></details><details><summary>What leaves this computer</summary><p>When you ask, your question and saved source text go to your selected provider. Notes and history otherwise stay here. Do not submit private material unless you are comfortable with that provider’s terms.</p></details><details><summary>Need to study without a key?</summary><p>You can read and organize your notes here without a key. Cloud answers need your own account. No keyless cloud service is connected.</p></details></aside></div>
+      </section>
+      <footer class="workspace-footer">Study with evidence. Check what matters.</footer>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "date": "2026-11-08",
+  "kind": "prototype_gate_before_comparison",
+  "approach": "baseline",
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "question": "What is a unit test?",
+  "output": {
+    "answer": "A unit test is a test that checks a single function in isolation, focusing on its behavior independently of other components.",
+    "citations": [
+      {
+        "quote": "A unit test checks one function in isolation.",
+        "source_id": "S3"
+      }
+    ],
+    "status": "answer"
+  },
+  "latency_ms": 912.149,
+  "history_entries": 1,
+  "empty_input_status": "clarify",
+  "nonsense_input_status": "clarify",
+  "citations_verified": true,
+  "process_credentials_not_persisted": true,
+  "result": "PASS"
+}

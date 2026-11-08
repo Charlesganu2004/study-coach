@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-08",
+  "tool": "FFmpeg 9.0.2 essentials, Gyan Windows build",
+  "official_provider_listing": "https://ffmpeg.org/download.html#build-windows",
+  "download": "https://www.gyan.dev/ffmpeg/builds/packages/ffmpeg-9.0.2-essentials_build.zip",
+  "published_checksum": "https://www.gyan.dev/ffmpeg/builds/packages/ffmpeg-9.0.2-essentials_build.zip.sha256",
+  "archive_sha256_verified": "60f467265b1e312373dbcd92200c2618a74850f98d3d078e94296bb3fa2047ba",
+  "reported_source_commit": "946fcce07b6dcd0331c8cc609192aeff5e1924f8",
+  "checks": [
+    "Provider is linked by the official FFmpeg downloads page.",
+    "Downloaded archive hash matched the published SHA256 before execution.",
+    "Archive was extracted into an isolated temporary review directory; no install scripts were run.",
+    "Microsoft Defender antivirus and real time protection were enabled; a custom scan of the review directory completed before execution.",
+    "Actual binary exposes libass subtitle rendering, H264 encoding, and Windows Graphics Capture.",
+    "A three second test confirmed capture of only the selected Study Coach window."
+  ],
+  "capture_scope": "Dedicated Study Coach browser window, HWND 10289434. Other windows, microphone, and system audio were not recorded.",
+  "limits": "This is a bounded binary provenance and local scan check, not a full source code audit or guarantee of safety. No encoder binaries are redistributed with the project or installer."
+}

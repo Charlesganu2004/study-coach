@@ -4,11 +4,11 @@ Results reflect saved API calls. Pending rows are not final model scores. Cost a
 
 | Model profile | Strict pass mean | Run range | Mean response time | Estimated cost / 1,000 | Successful / expected |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| groq-20b | 79.33% | 78.00% to 80.00% | 0.863 s | $0, conditional | 150 / 150 |
-| groq-120b | 85.33% | 84.00% to 86.00% | 0.899 s | $0, conditional | 150 / 150 |
-| nvidia-lightning | 83.33% | 82.00% to 86.00% | 20.854 s | $0, conditional | 150 / 150 |
+| `groq-20b` | 79.33% | 78.00% to 80.00% | 0.863 s | $0, conditional | 150 / 150 |
+| `groq-120b` | 85.33% | 84.00% to 86.00% | 0.899 s | $0, conditional | 150 / 150 |
+| `nvidia-lightning` | 83.33% | 82.00% to 86.00% | 20.854 s | $0, conditional | 150 / 150 |
 
-Selected model profile: **groq-120b**. Selection follows highest mean strict pass rate, with lowest mean successful response time as the tie-breaker. All compared requests have the same conditional $0 estimate. Scores measure this synthetic development set, not general learning effectiveness.
+Selected model profile: **`groq-120b`**. Selection follows highest mean strict pass rate, with lowest mean successful response time as the tie breaker. All compared requests have the same conditional $0 estimate. Scores measure this synthetic development set, not general learning effectiveness.
 
 ## Observed failures
 
@@ -58,7 +58,7 @@ Actual output:
 
 Scorer reasons: ["missing required concept"]
 
-Possible cause: the response omitted a required idea, used an unlisted synonym, or triggered a context-insensitive forbidden phrase. First change: manually inspect meaning and negation before deciding whether to improve the shared prompt or document and revise the rubric.
+Possible cause: the response omitted a required idea, used an unlisted synonym, or triggered a context insensitive forbidden phrase. First change: manually inspect meaning and negation before deciding whether to improve the shared prompt or document and revise the rubric.
 
 ### E20 (run 1)
 

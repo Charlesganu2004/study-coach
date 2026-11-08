@@ -1,0 +1,31 @@
+{
+  "cases_per_run": 50,
+  "chosen_profile": null,
+  "complete": true,
+  "experiment_fingerprint": "fnv1a64:217527e9dadddcf1",
+  "milestone_complete": false,
+  "models": [
+    {
+      "api_errors": 0,
+      "average_response_ms": 1002.0469079999998,
+      "cost_condition": "Only while requests are covered by the provider's free account limits; billing not independently verified",
+      "estimated_usd_per_1000_free_tier": 0.0,
+      "expected_requests": 50,
+      "model": "openai/gpt-oss-120b",
+      "passed": 43,
+      "profile": "groq-120b",
+      "provider": "groq",
+      "recorded_requests": 50,
+      "run_scores_percent": [
+        86.0
+      ],
+      "score_is_final": true,
+      "score_max_percent": 86.0,
+      "score_min_percent": 86.0,
+      "score_percent": 86.0,
+      "successful_requests": 50
+    }
+  ],
+  "runs_per_model": 1,
+  "selection_rule": "Highest mean strict pass rate, then lowest mean successful response latency; only complete error-free experiments are eligible"
+}

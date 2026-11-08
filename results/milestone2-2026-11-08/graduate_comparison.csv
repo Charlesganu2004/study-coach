@@ -1,0 +1,4 @@
+approach,model,cases,runs,passed,score_percent,mean_model_response_ms,mean_input_tokens,mean_output_tokens,estimated_usd_per_1000_requests,cost_condition,mean_retrieval_ms,mean_end_to_end_response_ms
+baseline_full,openai/gpt-oss-120b,50,1,39,78,923.994236,928.92,228.72,0,Only while requests are covered by the provider's free account limits; billing not independently verified,,
+grounded_full,openai/gpt-oss-120b,50,1,43,86,1002.046908,1076.92,237.6,0,Only while requests are covered by the provider's free account limits; billing not independently verified,,
+grounded_retrieval,openai/gpt-oss-120b,50,1,43,86,932.763154,688.92,210.96,0,Only while requests are covered by the provider's free account limits; billing not independently verified,0.157926,932.92108

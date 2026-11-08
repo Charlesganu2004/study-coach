@@ -1,0 +1,49 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1920
+PlayResY: 1200
+ScaledBorderAndShadow: yes
+WrapStyle: 2
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Segoe UI,36,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,1,0,2,90,90,20,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:05.00,Default,,0,0,0,,Study Coach turns saved notes\Ninto explanations and practice.
+Dialogue: 0,0:00:05.00,0:00:10.00,Default,,0,0,0,,This is the working Rust application,\Nwith a browser workspace.
+Dialogue: 0,0:00:10.00,0:00:15.00,Default,,0,0,0,,Notes and history stay on this computer.\NAsking sends source text to a provider.
+Dialogue: 0,0:00:15.00,0:00:20.00,Default,,0,0,0,,The comparison used the same 50 cases.\NEach new configuration ran once.
+Dialogue: 0,0:00:20.00,0:00:25.00,Default,,0,0,0,,The baseline scored 78%.\NThe revised prompt scored 86%.
+Dialogue: 0,0:00:25.00,0:00:30.00,Default,,0,0,0,,Retrieval also scored 86%, using\N36.03% fewer mean input tokens.
+Dialogue: 0,0:00:30.00,0:00:35.00,Default,,0,0,0,,Find the Test scope source\Nin the source panel.
+Dialogue: 0,0:00:35.00,0:00:40.00,Default,,0,0,0,,The source panel exposes the notes\Navailable for answering.
+Dialogue: 0,0:00:40.00,0:00:45.00,Default,,0,0,0,,An exact quotation must match\Nan original source passage.
+Dialogue: 0,0:00:45.00,0:00:50.00,Default,,0,0,0,,Bring the original source passage\Ninto view before asking.
+Dialogue: 0,0:00:50.00,0:00:55.00,Default,,0,0,0,,Ask: How does a unit test differ\Nfrom an integration test?
+Dialogue: 0,0:00:55.00,0:01:00.00,Default,,0,0,0,,This question uses the same\NRust core as the evaluator.
+Dialogue: 0,0:01:00.00,0:01:05.00,Default,,0,0,0,,Ask Study Coach to send this question\Nto the selected Groq 120B model.
+Dialogue: 0,0:01:05.00,0:01:10.00,Default,,0,0,0,,Wait for the provider response.\NThis is a real model request.
+Dialogue: 0,0:01:10.00,0:01:15.00,Default,,0,0,0,,The response now includes an explanation\Nand source evidence.
+Dialogue: 0,0:01:15.00,0:01:20.00,Default,,0,0,0,,Read the explanation alongside\Nthe source quotation.
+Dialogue: 0,0:01:20.00,0:01:25.00,Default,,0,0,0,,The app checks that each quotation\Nappears in its named source.
+Dialogue: 0,0:01:25.00,0:01:30.00,Default,,0,0,0,,An exact quote is checkable evidence.\NIt does not prove every answer claim.
+Dialogue: 0,0:01:30.00,0:01:35.00,Default,,0,0,0,,Next, test unclear input:\Nthree question marks.
+Dialogue: 0,0:01:35.00,0:01:40.00,Default,,0,0,0,,Try three question marks\Ninstead of a meaningful study question.
+Dialogue: 0,0:01:40.00,0:01:45.00,Default,,0,0,0,,An unclear question needs guidance\Nbefore a source based answer.
+Dialogue: 0,0:01:45.00,0:01:50.00,Default,,0,0,0,,For punctuation only input,\Na local clarification is enough.
+Dialogue: 0,0:01:50.00,0:01:55.00,Default,,0,0,0,,The app asks for a clearer question.\NNo model request is needed.
+Dialogue: 0,0:01:55.00,0:02:00.00,Default,,0,0,0,,Open My notes to add original material\Nto the local source library.
+Dialogue: 0,0:02:00.00,0:02:05.00,Default,,0,0,0,,Give the new source a title\Nand paste the short test scope passage.
+Dialogue: 0,0:02:05.00,0:02:10.00,Default,,0,0,0,,Save Demo notes to make this source\Navailable for the next question.
+Dialogue: 0,0:02:10.00,0:02:15.00,Default,,0,0,0,,The saved source now has a stable ID\Nin the local library.
+Dialogue: 0,0:02:15.00,0:02:20.00,Default,,0,0,0,,Open Past questions to revisit\Nan earlier accepted answer.
+Dialogue: 0,0:02:20.00,0:02:25.00,Default,,0,0,0,,History keeps the question, response,\Nand evidence on this computer.
+Dialogue: 0,0:02:25.00,0:02:30.00,Default,,0,0,0,,Choose the saved question\Nto restore its explanation and evidence.
+Dialogue: 0,0:02:30.00,0:02:35.00,Default,,0,0,0,,The saved answer returns without\Nanother model request.
+Dialogue: 0,0:02:35.00,0:02:40.00,Default,,0,0,0,,Connections lets users choose a model\Nand enter their own provider keys.
+Dialogue: 0,0:02:40.00,0:02:45.00,Default,,0,0,0,,The key fields stay blank on this screen.\NSaved keys are not returned here.
+Dialogue: 0,0:02:45.00,0:02:50.00,Default,,0,0,0,,Groq and NVIDIA offer limited free access.\NThere is no automatic paid fallback.
+Dialogue: 0,0:02:50.00,0:02:55.00,Default,,0,0,0,,Return to Study to keep learning\Nfrom the saved notes.
+Dialogue: 0,0:02:55.00,0:03:00.00,Default,,0,0,0,,One run on visible development cases.\NThese results do not measure learning.

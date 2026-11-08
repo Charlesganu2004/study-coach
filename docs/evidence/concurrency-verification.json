@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-08",
+  "platform": "Windows",
+  "checks": [
+    "Second concurrent launch refused: PASS",
+    "Restart after process termination acquired lock: PASS",
+    "Saved source survived reload: PASS"
+  ],
+  "targeted_test_output": "1 passed; 0 failed",
+  "mechanism": "OS file try_lock before loading credentials, sources or history; handle held for App lifetime",
+  "limits": "Native Linux and macOS process behavior was not tested."
+}

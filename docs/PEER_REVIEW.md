@@ -1,0 +1,11 @@
+# Peer review response status
+
+On November 8, 2026, authenticated GitHub inspection found no incoming review of Charles Ganu's Study Coach in the class review repository. The latest inspected commit was `17bd67af1804f96e7a0d0fbc32a23b04782b31a3` of [Merlissa09/milestone-peer-reviews](https://github.com/Merlissa09/milestone-peer-reviews/tree/17bd67af1804f96e7a0d0fbc32a23b04782b31a3). Two review files were present; their author and project headings identify them as Charles's outgoing reviews of other projects, not a partner's review of Study Coach. An earlier inspected snapshot, `527d08e6e4ef6170141bf3b885bb81e9cb8eb01d`, contained only the directory and [review template](https://github.com/Merlissa09/milestone-peer-reviews/blob/527d08e6e4ef6170141bf3b885bb81e9cb8eb01d/milestone1/milestone1-peer-review-template.md).
+
+The template asks the author to respond yes, no, or maybe with reasons in Part 4 and state the first change they will make. No response or partner suggestions have been invented. No review repository content was installed or executed, and no comment or commit was sent to it.
+
+When the real review is available, Charles must read it, complete its author column and final line, and push that response. Relevant suggested cases should be added in a versioned evaluation set and evaluated consistently. The controlled Milestone 2 comparison preserves the original 50 cases so the prompt change is the measured variable.
+
+The project's own failure analysis already motivated exact contiguous quotations and completion of requested quiz or practice tasks. Those changes are based on saved model failures, not a claimed peer suggestion. The missing peer response remains an assignment item to complete when the partner file exists.
+
+Charles's outgoing feedback is available in [the James Logan review](https://github.com/Merlissa09/milestone-peer-reviews/blob/17bd67af1804f96e7a0d0fbc32a23b04782b31a3/milestone1/reviews/james-logan.md) and [the Luis Cruz Sanchez review](https://github.com/Merlissa09/milestone-peer-reviews/blob/17bd67af1804f96e7a0d0fbc32a23b04782b31a3/milestone1/reviews/luis-cruz-sanchez.md). Their headings identify Charles as reviewer. These links satisfy the distinction between feedback Charles wrote for classmates and an author response to feedback on Study Coach; the latter is not yet available.

@@ -12,7 +12,7 @@ use study_coach::{core, eval};
 const HELP: &str = "Study Coach (Rust)\n\
   study-coach validate\n\
   study-coach doctor\n\
-  study-coach answer --model groq-20b --question \"What is recall?\"\n\
+  study-coach answer --model groq-120b --question \"What is recall?\"\n\
   study-coach answer --provider groq --model-id MODEL_ID --question TEXT\n\
   study-coach evaluate [--models all|ALIAS,ALIAS] [--runs 3] [--out DIRECTORY]\n\
   study-coach evaluate --resume DIRECTORY [--models all|ALIAS,ALIAS] [--runs 3]\n\
@@ -22,6 +22,9 @@ const HELP: &str = "Study Coach (Rust)\n\
 GROQ_API_KEY and NVIDIA_API_KEY, or ignored .env and .env.local files. Nonempty\n\
 process values take precedence, followed by .env.local, then .env. Never pass keys\n\
 as command arguments. Evaluation defaults to 50 cases, 3 models, and 3 runs.\n\
+answer/evaluate accept --approach baseline|grounded (default grounded). The\n\
+baseline preserves Milestone 1 instructions; grounded checks quotes and tasks.\n\
+summarize is read only and uses saved provenance without making API calls.\n\
 --limit selects an explicitly incomplete smoke experiment. Only free accounts\n\
 and provider-covered free quotas qualify for the reported conditional $0 cost.";
 
@@ -29,6 +32,7 @@ and provider-covered free quotas qualify for the reported conditional $0 cost.";
 struct Options {
     command: String,
     model: String,
+    approach: String,
     provider: Option<String>,
     model_id: Option<String>,
     question: Option<String>,
@@ -43,7 +47,8 @@ fn parse_options(arguments: &[String]) -> Result<Options, String> {
     let command = arguments.first().map(String::as_str).unwrap_or("help");
     let mut options = Options {
         command: command.into(),
-        model: "groq-20b".into(),
+        model: "groq-120b".into(),
+        approach: "grounded".into(),
         provider: None,
         model_id: None,
         question: None,
@@ -62,8 +67,21 @@ fn parse_options(arguments: &[String]) -> Result<Options, String> {
     }
     let allowed: &[&str] = match command {
         "validate" | "doctor" => &[],
-        "answer" => &["--model", "--provider", "--model-id", "--question"],
-        "evaluate" => &["--models", "--runs", "--out", "--resume", "--limit"],
+        "answer" => &[
+            "--model",
+            "--provider",
+            "--model-id",
+            "--question",
+            "--approach",
+        ],
+        "evaluate" => &[
+            "--models",
+            "--runs",
+            "--out",
+            "--resume",
+            "--limit",
+            "--approach",
+        ],
         "summarize" => &["--out"],
         _ => return Err("Unknown command; run study-coach help.".into()),
     };
@@ -89,6 +107,12 @@ fn parse_options(arguments: &[String]) -> Result<Options, String> {
             .ok_or_else(|| format!("Missing value for {flag}."))?;
         match flag {
             "--model" => options.model = value.clone(),
+            "--approach" => {
+                if !["baseline", "grounded"].contains(&value.as_str()) {
+                    return Err("--approach must be baseline or grounded.".into());
+                }
+                options.approach = value.clone();
+            }
             "--provider" => options.provider = Some(value.clone()),
             "--model-id" => options.model_id = Some(value.clone()),
             "--question" => options.question = Some(value.clone()),
@@ -137,6 +161,9 @@ struct Inputs {
     notes: Value,
     cases: Value,
     fingerprint: String,
+    dataset_fingerprint: String,
+    notes_fingerprint: String,
+    scorer_fingerprint: String,
 }
 
 fn read_json(path: &Path) -> Result<(Vec<u8>, Value), String> {
@@ -147,18 +174,19 @@ fn read_json(path: &Path) -> Result<(Vec<u8>, Value), String> {
     Ok((bytes, parsed))
 }
 
-fn load_inputs(root: &Path) -> Result<Inputs, String> {
+fn load_inputs(root: &Path, approach: &str) -> Result<Inputs, String> {
     let (config_bytes, config) = read_json(&root.join("models.json"))?;
     let (notes_bytes, notes) = read_json(&root.join("data/notes.json"))?;
     let (cases_bytes, cases) = read_json(&root.join("data/eval.json"))?;
     validate_config(&config)?;
     eval::validate(&notes, &cases)?;
+    let prompt = core::prompt_fingerprint_material(approach)?;
     let mut material = Vec::new();
     for component in [
         config_bytes.as_slice(),
         notes_bytes.as_slice(),
         cases_bytes.as_slice(),
-        core::prompt_fingerprint_material().as_bytes(),
+        prompt.as_bytes(),
         include_str!("core.rs").as_bytes(),
         include_str!("eval.rs").as_bytes(),
         include_str!("main.rs").as_bytes(),
@@ -171,6 +199,9 @@ fn load_inputs(root: &Path) -> Result<Inputs, String> {
         notes,
         cases,
         fingerprint: eval::fingerprint(&material),
+        dataset_fingerprint: eval::fingerprint(&cases_bytes),
+        notes_fingerprint: eval::fingerprint(&notes_bytes),
+        scorer_fingerprint: eval::fingerprint(include_str!("eval.rs").as_bytes()),
     })
 }
 
@@ -319,10 +350,11 @@ fn load_local_credentials(root: &Path) -> Result<(), String> {
     Ok(())
 }
 
-fn settings(config: &Value, profile: &Value) -> core::Settings {
+fn settings(config: &Value, profile: &Value, approach: &str) -> core::Settings {
     core::Settings {
         provider: profile["provider"].as_str().unwrap().to_owned(),
         model: profile["model"].as_str().unwrap().to_owned(),
+        approach: approach.into(),
         temperature: config["temperature"].as_f64().unwrap(),
         max_tokens: config["max_tokens"].as_u64().unwrap(),
         timeout_seconds: config["timeout_seconds"].as_u64().unwrap(),
@@ -450,6 +482,11 @@ fn check_manifest(existing: &Value, expected: &Value) -> Result<(), String> {
         "settings",
         "library_version",
         "schema_version",
+        "approach",
+        "system_prompt",
+        "dataset_fingerprint",
+        "notes_fingerprint",
+        "scorer_fingerprint",
     ] {
         if existing[field] != expected[field] {
             return Err(format!("Resume refused: manifest {field} differs. Use a new output directory for changed experiments."));
@@ -675,9 +712,12 @@ fn evaluate(root: &Path, inputs: &Inputs, options: &Options) -> Result<(), Strin
     }
     let cases = &all_cases[..count];
     let timestamp = unix_time()?;
-    let manifest = json!({"schema_version":1,"library_version":env!("CARGO_PKG_VERSION"),
+    let manifest = json!({"schema_version":2,"library_version":env!("CARGO_PKG_VERSION"),
         "fingerprint":inputs.fingerprint,"profiles":profiles,"runs":options.runs,"case_count":count,
-        "settings":inputs.config,"created_unix_seconds":timestamp});
+        "settings":inputs.config,"created_unix_seconds":timestamp,
+        "approach":options.approach,"system_prompt":core::prompt_fingerprint_material(&options.approach)?,
+        "dataset_fingerprint":inputs.dataset_fingerprint,"notes_fingerprint":inputs.notes_fingerprint,
+        "scorer_fingerprint":inputs.scorer_fingerprint});
     let directory = if let Some(directory) = &options.resume {
         let (_, existing) = read_json(&directory.join("manifest.json"))?;
         check_manifest(&existing, &manifest)?;
@@ -724,7 +764,7 @@ fn evaluate(root: &Path, inputs: &Inputs, options: &Options) -> Result<(), Strin
                 {
                     continue;
                 }
-                let config = settings(&inputs.config, profile);
+                let config = settings(&inputs.config, profile, &options.approach);
                 let call_key = (config.provider.clone(), config.model.clone());
                 let interval =
                     std::time::Duration::from_millis(profile["min_interval_ms"].as_u64().unwrap());
@@ -736,7 +776,7 @@ fn evaluate(root: &Path, inputs: &Inputs, options: &Options) -> Result<(), Strin
                 last_calls.insert(call_key, Instant::now());
                 let result = core::answer(case["input"].as_str().unwrap(), &inputs.notes, &config)
                     .and_then(guard_completion);
-                let mut record = json!({"profile":name,"provider":profile["provider"],"model":profile["model"],
+                let mut record = json!({"profile":name,"provider":profile["provider"],"model":profile["model"],"approach":options.approach,
                     "run":run,"case_id":case_id,"category":case["category"],"input":case["input"],
                     "expected_answer":case["expected_answer"],"recorded_unix_seconds":unix_time()?,
                     "raw_response":null,"parsed":null,"latency_ms":null,"input_tokens":null,"output_tokens":null,
@@ -797,7 +837,7 @@ fn run(options: Options) -> Result<(), String> {
         return Ok(());
     }
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    let inputs = load_inputs(&root)?;
+    let inputs = load_inputs(&root, &options.approach)?;
     if options.command == "summarize" {
         let directory = options.out.as_ref().unwrap();
         let (_, manifest) = read_json(&directory.join("manifest.json"))?;
@@ -818,16 +858,27 @@ fn run(options: Options) -> Result<(), String> {
             .collect::<Result<Vec<_>, _>>()?
             .join(",");
         let profiles = selected_profiles(&inputs.config, &names)?;
-        let expected = json!({"schema_version":1,"library_version":env!("CARGO_PKG_VERSION"),
-            "fingerprint":inputs.fingerprint,"profiles":profiles,"runs":runs,"case_count":count,"settings":inputs.config});
-        check_manifest(&manifest, &expected)?;
+        if manifest["profiles"] != profiles {
+            return Err("Saved experiment profiles differ from configured models.".into());
+        }
+        if !matches!(manifest["schema_version"].as_u64(), Some(1 | 2)) {
+            return Err("Saved experiment schema is unsupported.".into());
+        }
         let latest = load_records(&directory.join("records.jsonl"))?;
         validate_records(
             &latest,
             &manifest,
             &inputs.cases.as_array().unwrap()[..count],
         )?;
-        let summary = summarize_to(directory, &manifest, &latest)?;
+        let records: Vec<_> = latest.values().cloned().collect();
+        let mut summary = eval::summarize(&records, &manifest["profiles"], runs as usize, count);
+        summary["experiment_fingerprint"] = manifest["fingerprint"].clone();
+        summary["approach"] = manifest
+            .get("approach")
+            .cloned()
+            .unwrap_or(json!("baseline"));
+        println!("Read-only summary from saved provenance; current prompt/code fingerprint was not compared. No files were written.");
+        println!("{}", serde_json::to_string_pretty(&summary).unwrap());
         return if summary["complete"] == true {
             Ok(())
         } else {
@@ -888,7 +939,7 @@ fn run(options: Options) -> Result<(), String> {
             let completion = core::answer(
                 options.question.as_deref().unwrap(),
                 &inputs.notes,
-                &settings(&inputs.config, &profile),
+                &settings(&inputs.config, &profile, &options.approach),
             )
             .and_then(guard_completion)?;
             println!("{}",serde_json::to_string_pretty(&json!({"model":profile["model"],"provider":profile["provider"],"output":completion.parsed,"raw_response":completion.text,"latency_ms":completion.latency_ms,"input_tokens":completion.input_tokens,"output_tokens":completion.output_tokens,"attempts":completion.attempts})).unwrap());
@@ -1001,6 +1052,8 @@ mod tests {
         let options = parse_options(&args(&["evaluate"])).unwrap();
         assert_eq!(options.models, "all");
         assert_eq!(options.runs, 3);
+        assert_eq!(options.approach, "grounded");
+        assert_eq!(options.model, "groq-120b");
         assert!(options.limit.is_none());
     }
 
@@ -1016,6 +1069,7 @@ mod tests {
             vec!["answer", "--provider", "groq", "--question", "x"],
             vec!["summarize"],
             vec!["evaluate", "--limit", "0"],
+            vec!["evaluate", "--approach", "unknown"],
         ] {
             assert!(
                 parse_options(&args(&arguments)).is_err(),
@@ -1049,6 +1103,12 @@ mod tests {
         assert!(check_manifest(&manifest, &changed).is_err());
         changed = manifest.clone();
         changed["runs"] = json!(1);
+        assert!(check_manifest(&manifest, &changed).is_err());
+        changed = manifest.clone();
+        changed["approach"] = json!("grounded");
+        assert!(check_manifest(&manifest, &changed).is_err());
+        changed = manifest.clone();
+        changed["system_prompt"] = json!("different instructions");
         assert!(check_manifest(&manifest, &changed).is_err());
     }
 

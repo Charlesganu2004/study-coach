@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "model": "openai/gpt-oss-120b",
+  "provider": "groq",
+  "dataset": "data/eval.json",
+  "dataset_sha256": "b9d34f7867cfac8f31ffa942c4098df925ac0dfbb3fc06ca241300dd8d142c13",
+  "notes_sha256": "633d291835de8cb73c53892527d3912302529ab14fe05a0f1fde5ebc96d74966",
+  "changed_variable": "System prompt only; baseline instructions versus explicit task and contiguous quote verification instructions",
+  "rubric_changed": false,
+  "rows": [
+    {
+      "approach": "baseline",
+      "model": "openai/gpt-oss-120b",
+      "cases_per_run": 50,
+      "runs": 1,
+      "passed": 39,
+      "completed_requests": 50,
+      "score_percent": 78.0,
+      "score_min_percent": 78.0,
+      "score_max_percent": 78.0,
+      "average_response_ms": 923.9942360000001,
+      "estimated_usd_per_1000_free_tier": 0.0,
+      "cost_condition": "Only while requests are covered by the provider's free account limits; billing not independently verified",
+      "fingerprint": "fnv1a64:14be9f0f70763eff",
+      "evidence": "baseline/records.jsonl"
+    },
+    {
+      "approach": "grounded",
+      "model": "openai/gpt-oss-120b",
+      "cases_per_run": 50,
+      "runs": 1,
+      "passed": 43,
+      "completed_requests": 50,
+      "score_percent": 86.0,
+      "score_min_percent": 86.0,
+      "score_max_percent": 86.0,
+      "average_response_ms": 1002.0469079999998,
+      "estimated_usd_per_1000_free_tier": 0.0,
+      "cost_condition": "Only while requests are covered by the provider's free account limits; billing not independently verified",
+      "fingerprint": "fnv1a64:217527e9dadddcf1",
+      "evidence": "grounded/records.jsonl"
+    }
+  ],
+  "improvement_percentage_points": 8.0,
+  "limitation": "One run per approach; this does not estimate output variability or statistical significance. Milestone 1 has three runs per model."
+}

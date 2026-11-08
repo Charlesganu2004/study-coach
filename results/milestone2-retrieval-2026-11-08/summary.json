@@ -1,0 +1,43 @@
+{
+  "approach": "grounded",
+  "average_end_to_end_response_ms": 932.9210799999997,
+  "average_retrieval_ms": 0.157926,
+  "cases_per_run": 50,
+  "chosen_profile": "groq-120b",
+  "complete": true,
+  "context_mode": "lexical_top4",
+  "limitation": "One run on a visible development set; retrieval coverage is diagnosed with reference citations after selection and is not an inference input.",
+  "models": [
+    {
+      "api_errors": 0,
+      "average_response_ms": 932.7631539999998,
+      "cost_condition": "Only while requests are covered by the provider's free account limits; billing not independently verified",
+      "estimated_usd_per_1000_free_tier": 0.0,
+      "expected_requests": 50,
+      "model": "openai/gpt-oss-120b",
+      "passed": 43,
+      "profile": "groq-120b",
+      "provider": "groq",
+      "recorded_requests": 50,
+      "run_scores_percent": [
+        86.0
+      ],
+      "score_is_final": true,
+      "score_max_percent": 86.0,
+      "score_min_percent": 86.0,
+      "score_percent": 86.0,
+      "successful_requests": 50
+    }
+  ],
+  "retrieval": {
+    "answer_cases_recorded": 36,
+    "answer_cases_with_all_expected_sources": 36,
+    "average_selected_sources": 3.88,
+    "expected_reference_recall_percent": 100.0,
+    "expected_source_references": 37,
+    "retrieved_expected_source_references": 37,
+    "top_k": 4
+  },
+  "runs_per_model": 1,
+  "selection_rule": "Highest mean strict pass rate, then lowest mean successful response latency; only complete error-free experiments are eligible"
+}
