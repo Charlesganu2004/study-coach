@@ -25,7 +25,7 @@
       <div class="sidebar-bottom"><span class="local-dot" aria-hidden="true"></span> Saved on this computer<p>Cloud models receive your question and notes when you ask.</p><span id="version" class="version"></span></div>
     </aside>
     <main id="main" tabindex="-1">
-      <header class="topbar"><span id="page-label">Your study workspace</span><div class="topbar-tools"><button id="motion-toggle" class="motion-toggle" type="button" aria-pressed="false">Motion on</button><span id="connection-status" class="connection">Connecting…</span></div></header>
+      <header class="topbar"><span id="page-label">Your study workspace</span><div class="topbar-tools"><button id="motion-toggle" class="motion-toggle" type="button" aria-pressed="false">Motion on</button><span id="connection-status" class="connection">Connecting…</span><button id="close-app" class="close-app" type="button" aria-label="Close Study Coach" title="Close Study Coach"><span aria-hidden="true">×</span></button></div></header>
       <div id="global-error" class="notice error" role="alert" hidden></div>
 
       <section id="page-study" class="page" aria-labelledby="study-title">
@@ -64,5 +64,15 @@
       <footer class="workspace-footer">Study with evidence. Check what matters.</footer>
     </main>
   </div>
+  <section id="shutdown-screen" class="shutdown-screen" aria-labelledby="shutdown-title" tabindex="-1" hidden>
+    <div class="shutdown-panel">
+      <span class="brand-mark" aria-hidden="true">sc.</span>
+      <p class="eyebrow">Your workspace, saved locally</p>
+      <h1 id="shutdown-title">Closing Study Coach…</h1>
+      <p id="shutdown-message" role="status" aria-live="polite"></p>
+      <p id="shutdown-help" class="muted">Open Study Coach again from its Start menu shortcut or <code>StartStudyCoach.cmd</code>. Your saved notes, history, settings, and keys will be kept.</p>
+      <div class="shutdown-actions"><button id="retry-close" class="button" type="button" hidden>Try closing again</button><button id="return-to-app" class="text-button" type="button" hidden>Return to workspace</button><button id="close-tab" class="text-button" type="button">Close this tab</button></div>
+    </div>
+  </section>
 </body>
 </html>

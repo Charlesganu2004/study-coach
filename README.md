@@ -10,7 +10,9 @@ Milestone 1 evaluation is complete locally: 50 examples, three runs per model, 4
 
 ## Install the application
 
-The application has a browser interface, saved notes, exact source quotations, question history, and a local connection screen. The Windows package includes the compiled Rust service; people installing it do not need Rust. Extract `StudyCoach-0.1.0-x86_64-pc-windows-gnu.zip`, then double click `StartStudyCoach.cmd`, or run `install.ps1` from the extracted folder for a normal installation for your account. [Installation and removal instructions](docs/INSTALL.md) cover the portable package, Linux and macOS source installation, and building a package yourself.
+The application has a browser interface, saved notes, exact source quotations, question history, and a local connection screen. The Windows package includes the compiled Rust service; people installing it do not need Rust. Extract `StudyCoach-0.1.1-x86_64-pc-windows-gnu.zip`, then double click `StartStudyCoach.cmd`, or run `install.ps1` from the extracted folder for a normal installation for your account. [Installation and removal instructions](docs/INSTALL.md) cover the portable package, Linux and macOS source installation, and building a package yourself.
+
+Use the X labelled **Close Study Coach** at the top right to stop the app. If an answer is running, closing waits for it to finish. Saved notes, history, settings, and keys remain available when you reopen the launcher. If the browser keeps the closed page open, close that tab with `Ctrl+W`. The X remains visible when browser controls are hidden.
 
 First launch creates a separate application data folder and a blank `.env` file. Open **Connections**, choose a model, paste your own key, and save. Keys are never included in the package or returned to the browser. The local credential file is not an encrypted secret vault. Existing project keys are not automatically copied into an installation.
 
@@ -95,7 +97,7 @@ Model output has this schema:
 }
 ```
 
-Allowed statuses are `answer`, `clarify`, and `abstain`. Clarification and abstention require an empty citation array. The application sends its current complete note collection on every request. The evaluation uses the fixed bundled collection. Plain text import is supported; PDF extraction, embeddings, and retrieval are not implemented.
+Allowed statuses are `answer`, `clarify`, and `abstain`. Clarification and abstention require an empty citation array. The application sends its current complete note collection by default; `--context retrieval` enables the lexical selector measured in Milestone 2. The evaluation uses the fixed bundled collection. Plain text import is supported; PDF extraction and embeddings are not implemented.
 
 ## Run the full evaluation in one command
 
@@ -171,7 +173,7 @@ cargo test --locked
 
 On this machine prepend `+stable-x86_64-pc-windows-gnu` after `cargo` for check, clippy, and test. Tests cover real curl transport to a local mock server, request construction that protects credentials, invalid responses, strict scoring, integrity of reference answers, and incomplete experiment handling. They make no calls to Groq or NVIDIA.
 
-Browser checks are real Playwright code in [tests/ui-smoke.mjs](tests/ui-smoke.mjs). They require Node, an available official Playwright installation, and a browser. Build `study-coach-app` first, then run `node tests/ui-smoke.mjs`. Windows checks use installed Microsoft Edge. Its answer and quota response are labelled fixtures. The optional `node tests/live-ui.mjs PATH_TO_LOCAL_CREDENTIAL_FILE` makes one real request through the UI, verifies its quotations, and checks history. [Verification details](docs/VERIFICATION.md) distinguish 18 browser checks and the real request from model measurements.
+Browser checks are real Playwright code in [tests/ui-smoke.mjs](tests/ui-smoke.mjs). They require Node, an available official Playwright installation, and a browser. Build `study-coach-app` first, then run `node tests/ui-smoke.mjs`. Windows checks use installed Microsoft Edge. Its answer and quota response are labelled fixtures. Run `node tests/lifecycle-ui.mjs` for close and reopen checks against two real local app processes, including saved data, unsaved edits, and failed shutdown recovery. This test uses labelled response and browser policy fixtures and makes no provider requests. Both scripts accept `STUDY_COACH_APP` to select a built executable. The optional `node tests/live-ui.mjs PATH_TO_LOCAL_CREDENTIAL_FILE` makes one real request through the UI, verifies its quotations, and checks history. [Verification details](docs/VERIFICATION.md) distinguish browser checks and real requests from model measurements.
 
 ## Demo and submission
 

@@ -83,6 +83,10 @@ The prompt comparison completed 100 responses: original prompt 39/50 strict pass
 
 CSV round trip output: `PASS: CSV round trip: 50 cases, 450 unique final responses, 3 model summaries; text, score and timing checked.` The three configuration graduate CSV was also read back and checked against independently aggregated scores and token means. Historical data, scoring code, model settings, and Milestone 1 JSON evidence remain unchanged.
 
+## November 9 close and reopen update
+
+Version 0.1.1 adds a persistent close control and authenticated service shutdown. The [lifecycle verification](LIFECYCLE.md) records 59 Rust tests, 10 lifecycle browser checks, the existing 18 presentation checks, and a rebuilt Windows package. Actual process exit and reopening preserve saved data. Browser policy, provider replies, and shutdown failure responses are labelled fixtures. The [new package receipt](LIFECYCLE_PACKAGE_VERIFICATION.json) is separate from the November 8 alpha receipt above. No evaluation responses or alpha tag were changed.
+
 The source and saved evidence are published through the checked Git workflow, with the submission snapshot identified by `alpha`. The actual classroom demo and classmate observations remain separate. The incoming partner review is absent at the inspected commit; its author response cannot be fabricated. No account access change, paid fallback, or automatic GitHub release is part of this workflow.
 
 ## Recorded demo and publication checks

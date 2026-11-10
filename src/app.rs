@@ -65,6 +65,7 @@ struct App {
     settings: Value,
     approach: String,
     context_mode: String,
+    shutdown_requested: bool,
 }
 
 #[derive(Debug)]
@@ -509,6 +510,7 @@ impl App {
             settings,
             approach,
             context_mode,
+            shutdown_requested: false,
         })
     }
 
@@ -567,7 +569,15 @@ impl App {
             },
             ("GET", "/api/state") => Response::json(200, self.state()),
             ("GET", "/api/history") => Response::json(200, json!({"entries":self.history})),
-            ("POST", path) if ["/api/settings", "/api/sources", "/api/answer"].contains(&path) => {
+            ("POST", path)
+                if [
+                    "/api/settings",
+                    "/api/sources",
+                    "/api/answer",
+                    "/api/shutdown",
+                ]
+                .contains(&path) =>
+            {
                 if request
                     .headers
                     .get("content-type")
@@ -583,6 +593,10 @@ impl App {
                 let result = match path {
                     "/api/settings" => self.save_settings(&body),
                     "/api/sources" => self.add_source(&body),
+                    "/api/shutdown" => {
+                        self.shutdown_requested = true;
+                        Ok(json!({"shutdown":true}))
+                    }
                     _ => self.answer(&body),
                 };
                 match result {
@@ -978,7 +992,8 @@ fn write_response(stream: &mut TcpStream, response: &Response) -> std::io::Resul
     };
     write!(stream,"HTTP/1.1 {} {}\r\nContent-Type: {}\r\nContent-Length: {}\r\nConnection: close\r\nCache-Control: no-store\r\nX-Content-Type-Options: nosniff\r\nReferrer-Policy: no-referrer\r\nContent-Security-Policy: default-src 'self'; connect-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; frame-ancestors 'none'; form-action 'self'\r\n\r\n",
         response.status,reason,response.content_type,response.body.len())?;
-    stream.write_all(&response.body)
+    stream.write_all(&response.body)?;
+    stream.flush()
 }
 
 fn open_browser(url: &str) {
@@ -1101,6 +1116,9 @@ pub fn run(arguments: impl Iterator<Item = String>) -> Result<(), String> {
             Err((status, message)) => Response::error(status, message),
         };
         let _ = write_response(&mut stream, &response);
+        if app.shutdown_requested {
+            break;
+        }
     }
     Ok(())
 }
@@ -1161,6 +1179,7 @@ mod tests {
             settings: json!({}),
             approach: "grounded".into(),
             context_mode: "full".into(),
+            shutdown_requested: false,
         }
     }
 

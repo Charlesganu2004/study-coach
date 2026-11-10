@@ -1,6 +1,6 @@
 'use strict';
 const $ = id => document.getElementById(id);
-const app = { state: null, page: 'study', answer: null, busy: false };
+const app = { state: null, page: 'study', answer: null, busy: false, closing: false, closed: false };
 const pages = ['study', 'notes', 'history', 'settings'];
 const labels = { study: 'Your study workspace', notes: 'Your source library', history: 'Your learning history', settings: 'Your model connections' };
 const byteLength = text => new TextEncoder().encode(text).length;
@@ -244,7 +244,58 @@ $('copy-answer').addEventListener('click', async () => {
     setTimeout(() => { $('copy-answer').textContent = 'Copy answer'; }, 2000);
   } catch { $('copy-answer').textContent = 'Select answer text to copy'; }
 });
-window.addEventListener('hashchange', () => navigate(location.hash.slice(1), false));
+async function closeApp() {
+  if (app.closing || app.closed) return;
+  const hasUnsavedNotes = $('note-title').value.trim() || $('note-text').value.trim();
+  const hasUnsavedConnections = $('groq-key').value.trim() || $('nvidia-key').value.trim()
+    || (app.state && $('profile').value !== app.state.selected_profile);
+  if ((hasUnsavedNotes || hasUnsavedConnections) && !window.confirm('Close Study Coach? Unsaved notes or connection edits will be lost. Saved data stays on this computer.')) return;
+  app.closing = true;
+  $('close-app').disabled = true;
+  $('retry-close').hidden = true;
+  $('return-to-app').hidden = true;
+  $('close-tab').hidden = true;
+  $('shutdown-title').textContent = 'Closing Study Coach…';
+  $('shutdown-message').textContent = app.busy
+    ? 'The current answer will finish before the local app stops. Keep this tab open until closing is confirmed.'
+    : 'Stopping the local app. Your saved data stays on this computer.';
+  document.querySelector('.app-shell').hidden = true;
+  $('shutdown-screen').hidden = false;
+  $('shutdown-screen').focus();
+  app.refreshMotion?.();
+  try {
+    const result = await api('/api/shutdown', { method: 'POST', body: '{}' });
+    if (result.shutdown !== true) throw new Error('The local app did not confirm shutdown.');
+    app.closed = true;
+    app.closing = false;
+    $('shutdown-title').textContent = 'Study Coach is closed.';
+    $('shutdown-message').textContent = 'The local service has stopped. You can close this tab and reopen Study Coach from its launcher.';
+    $('close-tab').hidden = false;
+    app.refreshMotion?.();
+    window.close();
+  } catch (error) {
+    app.closing = false;
+    $('close-app').disabled = false;
+    $('shutdown-title').textContent = 'Closing could not be confirmed.';
+    $('shutdown-message').textContent = `${error.message} Try again, or stop the launcher terminal with Ctrl+C.`;
+    $('retry-close').hidden = false;
+    $('return-to-app').hidden = false;
+    app.refreshMotion?.();
+  }
+}
+$('close-app').addEventListener('click', closeApp);
+$('retry-close').addEventListener('click', closeApp);
+$('return-to-app').addEventListener('click', () => {
+  if (app.closed || app.closing) return;
+  $('shutdown-screen').hidden = true;
+  document.querySelector('.app-shell').hidden = false;
+  $('close-app').focus();
+});
+$('close-tab').addEventListener('click', () => {
+  window.close();
+  $('shutdown-help').textContent = 'If your browser keeps this tab open, press Ctrl+W to close it. Press F11 to show hidden browser controls. Reopen Study Coach from its shortcut or StartStudyCoach.cmd.';
+});
+window.addEventListener('hashchange', () => { if (!app.closing && !app.closed) navigate(location.hash.slice(1), false); });
 
 // The background projects a small 3D point field onto a high density canvas.
 // No library, remote asset, tracking, or network request is used for the effect.
@@ -264,7 +315,7 @@ function initializeMotion() {
     const seed = (index * 137.508) * Math.PI / 180;
     return { x: Math.cos(seed) * (200 + index * 7), y: Math.sin(seed * 1.71) * 600, z: Math.sin(seed) * 650 };
   });
-  const reduced = () => userReduced || preference.matches;
+  const reduced = () => userReduced || preference.matches || app.closing || app.closed;
   function render(time = 0) {
     frame = 0;
     if (!context) return;
@@ -308,6 +359,7 @@ function initializeMotion() {
     toggle.disabled = preference.matches;
     render(performance.now());
   }
+  app.refreshMotion = refresh;
   function resize() {
     width = innerWidth;
     height = innerHeight;

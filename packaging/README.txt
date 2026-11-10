@@ -15,7 +15,11 @@ Removal of installed program files:
   sh ./uninstall.sh
 
 The browser interface is served on 127.0.0.1 only. Keep the launcher running
-while using the application. Close its terminal to stop the local service.
+while using the application. Click the X labelled Close Study Coach at the top
+right to stop the local service. A current answer finishes before shutdown.
+If the browser keeps the closed page open, press Ctrl+W to close that tab.
+Reopen StartStudyCoach.cmd or the Start menu shortcut to return to saved data.
+If shutdown cannot be confirmed, press Ctrl+C in the launcher terminal.
 No Rust installation is required to run a prebuilt package. curl must be on
 PATH. Windows includes curl.exe; Linux and macOS users can check curl --version.
 

@@ -120,7 +120,7 @@ The [qualitative audit](results/milestone1-2026-11-01/QUALITATIVE_AUDIT.md) also
 
 The cases form a visible development set, not an unseen final test or evidence of improved learning. Phrase checks can reject valid paraphrases and extra citations while accepting an incomplete quiz. Future work should version task completion checks, assess semantic support, and use an independent final set with actual users' permission.
 
-Sources are sent in full, with a 64 source and 180 KiB library limit. Plain text import does not extract PDF slides, images, audio, or Office files. This is a local single user application. Credentials are not encrypted; malware running as the same account is outside its protection. Provider terms, availability, quotas, and billing eligibility remain the user's responsibility. Two attack examples do not establish general prompt injection resistance.
+Sources are sent in full by default, with a 64 source and 180 KiB library limit. The optional lexical retrieval mode is described in Section 4. Plain text import does not extract PDF slides, images, audio, or Office files. This is a local single user application. Credentials are not encrypted; malware running as the same account is outside its protection. Provider terms, availability, quotas, and billing eligibility remain the user's responsibility. Two attack examples do not establish general prompt injection resistance.
 
 The supplied Milestone 2 sheet names sections 2 to 4 but does not give all six final section titles. Sections 1, 5, and 6 here organize the remaining material; alignment with a separate final rubric is unverified.
 
@@ -135,3 +135,9 @@ The submission snapshot is identified by [the alpha tag](https://github.com/Char
 [Peer review inspection](docs/PEER_REVIEW.md) found no incoming review of Study Coach at the inspected class repository commit, so Charles's author response remains pending. Charles's completed outgoing reviewer feedback is available for [James Logan](https://github.com/Merlissa09/milestone-peer-reviews/blob/17bd67af1804f96e7a0d0fbc32a23b04782b31a3/milestone1/reviews/james-logan.md) and [Luis Cruz Sanchez](https://github.com/Merlissa09/milestone-peer-reviews/blob/17bd67af1804f96e7a0d0fbc32a23b04782b31a3/milestone1/reviews/luis-cruz-sanchez.md). These are outgoing reviews of other projects, not the missing incoming review or author response.
 
 The repository contains source code, CSV exports, measured result evidence, packaging scripts, verification receipts, and the captioned demo. The Windows ZIP remains a local distributable rather than a published GitHub release. Classroom delivery, classmate observations, and the incoming author response remain separate requirements.
+
+### November 9 application lifecycle update
+
+Version 0.1.1 adds an X labelled **Close Study Coach** at the top right. The control remains visible while scrolling, stops the local service, releases its data folder lock, and preserves saved notes, history, settings, and keys for reopening. Closing waits for a current answer to finish. Unsaved notes or connection edits require confirmation; a browser that refuses tab closure shows a closed page with reopening instructions.
+
+The [lifecycle verification](docs/LIFECYCLE.md) records 59 passing Rust tests, 10 lifecycle browser checks, the existing 18 presentation checks, and the verified new Windows package. Its error and provider response fixtures are explicitly labelled. No new provider requests or evaluation measurements were made. The original `alpha` submission snapshot remains unchanged; this application fix is a separate update.

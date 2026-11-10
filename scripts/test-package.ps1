@@ -1,5 +1,8 @@
 [CmdletBinding()]
-param([Parameter(Mandatory = $true)][string]$ArchivePath)
+param(
+    [Parameter(Mandatory = $true)][string]$ArchivePath,
+    [string]$ReceiptPath = (Join-Path (Split-Path -Parent $PSScriptRoot) 'docs\PACKAGE_VERIFICATION.json')
+)
 
 $ErrorActionPreference = 'Stop'
 $CoachArchive = [IO.Path]::GetFullPath($ArchivePath)
@@ -141,7 +144,7 @@ try {
         windows_runtime_dependencies = $CoachDependencies
         limits = @('No real provider request was made by this package test.', 'Linux and macOS runtime behavior was not verified by this Windows test.', 'Checksums detect corruption and do not authenticate a publisher.')
     }
-    $CoachReceiptPath = Join-Path (Split-Path -Parent $PSScriptRoot) 'docs\PACKAGE_VERIFICATION.json'
+    $CoachReceiptPath = [IO.Path]::GetFullPath($ReceiptPath)
     [IO.File]::WriteAllText($CoachReceiptPath, ($CoachReceipt | ConvertTo-Json -Depth 4), (New-Object Text.UTF8Encoding($false)))
 } finally {
     if ($CoachProcess -and -not $CoachProcess.HasExited) { Stop-Process -Id $CoachProcess.Id }

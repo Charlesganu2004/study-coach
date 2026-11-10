@@ -18,7 +18,9 @@ An optional destination and shortcut choice are available:
 .\install.ps1 -InstallDir 'C:\Users\YourName\Apps\StudyCoach' -NoShortcut
 ```
 
-Close the launcher terminal to stop the local service. Close Study Coach before replacing an installed binary during an upgrade. Rerun the new package installer with the same destination to update the program files.
+Use the X labelled **Close Study Coach** at the top right to stop the local service. The button remains visible while scrolling and when browser controls are hidden. Closing waits for any current answer to finish. Saved data stays in the application data folder. If the browser cannot close its own tab, the page confirms shutdown; press `Ctrl+W` to close the tab. Press `F11` to show browser controls hidden by full screen mode.
+
+Reopen Study Coach from its Start menu shortcut or `StartStudyCoach.cmd`. Close Study Coach before replacing an installed binary during an upgrade. Rerun the new package installer with the same destination to update the program files. For an older version without the X, or if shutdown cannot be confirmed, use `Ctrl+C` in its launcher terminal to stop that service first.
 
 ## Keys and user data
 

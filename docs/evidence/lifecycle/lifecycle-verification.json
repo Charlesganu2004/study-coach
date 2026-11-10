@@ -1,0 +1,22 @@
+{
+  "package_version": "0.1.1",
+  "checks": [
+    "Labelled desktop X has a 44px touch target.",
+    "X remains in view after scrolling at 390px and 320px without overflow.",
+    "Cancelling close preserves an unsaved note and keeps the service running.",
+    "Cancelling close also preserves an unsaved model selection.",
+    "A labelled shutdown error fixture allows retry or return to the running workspace.",
+    "An answer that arrives during failed shutdown remains visible on return to the workspace.",
+    "Pending answer fixture shows a waiting message and does not offer premature tab close.",
+    "Real authenticated shutdown exits the service and displays a closed page if the browser refuses tab closure.",
+    "Second launch reuses the data folder without a lock error and retains notes, history, profile and fake key.",
+    "Reopened application closes normally again with no browser exceptions."
+  ],
+  "actual_provider_calls": 0,
+  "fixtures": [
+    "provider presentation only",
+    "shutdown error responses",
+    "browser window.close refusal"
+  ],
+  "screenshot_directory": "docs/evidence/lifecycle"
+}
