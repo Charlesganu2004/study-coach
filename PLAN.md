@@ -20,4 +20,4 @@ Progress: all five steps complete locally. All three models completed three runs
 
 Later request: move the new, uncommitted project out of the class repository to `C:\Users\Charl\Downloads\study-coach-rust`, add an ignored blank `.env` with automatic loading, initialize an independent repository, verify the full suite and staged files, then create and populate its private GitHub repository under `Charlesganu2004`.
 
-Later progress: standalone folder, independent Git repository, blank ignored `.env`, documented credential loading, and forty passing tests are verified. Private GitHub repository created at `https://github.com/Charlesganu2004/study-coach-rust`; `origin` points there. No API credentials or live benchmark results are included in the initial project files.
+Later progress: standalone folder, independent Git repository, blank ignored `.env`, documented credential loading, and forty passing tests are verified. Private GitHub repository created at `https://github.com/Charlesganu2004/study-coach`; `origin` points there. No API credentials or live benchmark results are included in the initial project files.

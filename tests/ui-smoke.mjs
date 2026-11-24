@@ -64,6 +64,7 @@ try {
   await page.locator('#note-count').filter({ hasText: '13' }).waitFor();
   await page.locator('.nav-item[data-page="notes"]').click();
   await page.locator('#note-file').setInputFiles({ name: 'Imported study notes.md', mimeType: 'text/markdown', buffer: Buffer.from('A useful study question can be answered from its source material.\n', 'utf8') });
+  await page.waitForFunction(() => document.getElementById('note-title').value === 'Imported study notes');
   assert.equal(await page.locator('#note-title').inputValue(), 'Imported study notes');
   await page.locator('#save-note').click();
   await page.locator('#note-count').filter({ hasText: '14' }).waitFor();

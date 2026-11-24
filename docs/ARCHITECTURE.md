@@ -1,61 +1,62 @@
-# Application architecture
+# Study Coach architecture
 
-The installed application is a Rust executable with embedded HTML, CSS, and JavaScript. It serves a browser workspace on an automatically selected IPv4 loopback port. There is no hosted application server, account database, or user sign in. Provider credentials belong to each local user.
+![Application architecture](architecture.svg)
+
+[Open the standalone architecture diagram](architecture.html).
+
+Study Coach is a local Rust application with an embedded browser workspace. A loopback API owns credentials, saved data, source validation, and private quiz solutions. Browser code owns navigation, test forms, diagrams, printing, and clipboard export. Imports and exports stay local; explicit study actions send notes to the selected inference service.
 
 ```mermaid
-flowchart TD
-    UI[Browser workspace]
-    API[Rust loopback API and session checks]
-    INPUT[Question and source limits]
-    FILES[Local files: notes, history, settings, .env]
-    CORE[Shared core::answer and chosen prompt]
-    RETRIEVE[Optional lexical source selection]
-    CLOUD[Groq or NVIDIA HTTPS model API]
-    GUARD[Schema, secret, and exact quotation checks]
-    EVAL[Command line evaluation and fixed cases]
-    SCORE[Deterministic Rust rubric]
-    RESULTS[Manifests, raw records, summaries and CSV]
-    UI -->|question or source edits| API
-    API -->|Host, Origin and session token accepted| INPUT
-    INPUT -->|validated question and current notes| RETRIEVE
-    RETRIEVE -->|all notes or up to four matching sources| CORE
-    API <-->|local persistence| FILES
-    FILES -->|credential for authorization; notes for context| CORE
-    CORE -->|question, sources and system prompt| CLOUD
-    CLOUD -->|response and usage| CORE
-    CORE --> GUARD
-    GUARD -->|checked answer or safe error| API
-    API -->|answer and source passages; no keys| UI
-    EVAL -->|same answer function and fixed notes| CORE
-    CORE -->|unmodified completion for scoring| SCORE
-    EVAL --> RESULTS
-    SCORE --> RESULTS
+flowchart LR
+    B[Browser workspace] <-->|same-origin session| A[Local API]
+    I[Bounded file extraction] -->|editable preview| A
+    A <-->|atomic writes and process lock| D[(Local files)]
+    A --> S[Study and quiz engine]
+    S <-->|explicit selected connection| M[HTTPS model or loopback service]
+    S --> G[Schema, secret and quotation guard]
+    G -->|checked content| B
+    B --> E[Word, PDF and OneNote copy]
 ```
 
-## Components and state
+## Tests and review progress
 
-| Component | Technology and responsibility | Connection to the model |
+Creating a test returns question identifiers, text, format, and choices. Solutions, accepted answers, and a snapshot of the chosen sources remain in the service. Each test and study material can use the full notebook or explicitly selected source IDs. Selection is checked on the server before model generation and citation verification. Requests support multiple choice, open response, fill in the blank, and custom instructions, with 1 to 30 questions generated in batches of at most five. Count, format, duplicate, and complete-answer checks must pass before an exam opens.
+
+Exact grading preserves signs, decimals, and operators. Other free-text responses are assessed by the selected model against the source snapshot and reference. Partial responses permit a retry; wrong or revealed responses show the solution. Correct and incorrect results are terminal. Transport or schema failures leave the answer ungraded. Credential changes invalidate active tests. Restarting the service replaces the active test while retaining recorded progress.
+
+`progress.json` stores the latest result per attempted question, up to 100 records. The dashboard reports correct, partial, and incorrect answers by topic. It does not claim a validated mastery score. Model grading is guidance and can be wrong.
+
+## Imports and generated materials
+
+`documents.rs` caps uploads at 12 MiB. Text, Markdown, CSV/TSV and caption files use bounded UTF-8 extraction. A fixed Windows PowerShell helper reads DOCX, PPTX and XLSX with .NET ZIP/XML APIs, rejecting macros, DTDs, unsafe archive paths, and excessive expansion. Windows native OCR handles screenshots and rendered PDF pages. Extraction is editable before saving because OCR can be wrong.
+
+Video imports use a supplied transcript, or embedded captions when FFmpeg is available. Container demuxers and protocols are restricted, and MOV external references are disabled. There is no automatic speech transcription or video scene understanding. Missing captions or extraction support produces a clear transcript-required error. Rich binary extraction currently requires Windows; text imports and Word export are portable.
+
+Extracted text is limited to 180 KiB. Bulk saving splits UTF-8 safely into bounded sources and commits the whole change atomically. The library has at most 64 sources totaling 180 KiB, with 16 KiB per source and 160 bytes per title. A full library can reject a valid upload without partial writes.
+
+`study.rs` validates notes, five-card recall sets, original text memory aids, and structured diagrams. Note styles, document types, and custom preferences are bounded data in the generation request. Acronyms and short original song lyrics include source-fact mappings. The browser draws diagram nodes and edges from validated JSON, not model-generated executable HTML or SVG.
+
+## Connections and trust boundaries
+
+Templates cover Groq, NVIDIA, OpenAI, OpenRouter, Ollama, and another OpenAI-compatible service. Existing bundled models remain available. Users can add a connection name, model ID, chat-completions URL and key. Templates describe supported protocols, not every model available from each provider.
+
+Remote custom endpoints require HTTPS and a key; strict loopback HTTP can be keyless. Validation rejects URL credentials, queries, fragments, ambiguous hosts, unsupported protocols and header injection. Curl never follows redirects. Keys are supplied through standard input, not process arguments, and are omitted from public state. Existing study data is checked before accepting a new credential; imported and generated content is checked for configured secrets.
+
+Mutations require the local session token, expected Host and Origin, and JSON content type. Responses use a restrictive Content Security Policy, no-store caching, and text rendering for source/model content. A malicious process running as the same account is outside this boundary. Local credential files are not an encrypted secret vault.
+
+## State and output ownership
+
+| Owner | State or output | Boundary |
 |---|---|---|
-| Workspace | Original HTML, CSS, and browser JavaScript; Study, My notes, Past questions, Connections | Sends explicit user actions to the local API; renders source text as text rather than HTML |
-| Local service | Rust `std::net`, bounded HTTP parsing, same origin requests, random session token | Validates requests and calls `core::answer`; exposes no arbitrary endpoint or file path option to the browser |
-| Model adapter | Rust and system curl over fixed HTTPS endpoints | Groq or NVIDIA receives the question, system prompt, and complete current source collection |
-| Context selection | Rust deterministic lexical ranking with stable ties | Full context by default; optional retrieval sends up to four positively matching sources, or the complete collection when there is no match |
-| Credential storage | `.env` in the user's application data folder | The local process loads keys for provider authorization; API state returns only configured booleans |
-| Study storage | `sources.json`, `settings.json`, and `history.json`; atomic replacement | Stores source text and up to 50 accepted responses; no external database |
-| Output guard | Rust schema, credential, source ID, duplicate, and exact substring checks | Withholds invalid model answers before display or persistence; this does not prove semantic entailment |
-| Evaluator | Same core answer function, frozen cases and deterministic rubric | Stores raw completions, including failures, so invalid output remains measurable |
-| Distribution | Native executable, launchers, checksum manifest, installation scripts | Creates no cloud account and contains no developer key; compilation embeds only public assets and synthetic sample notes |
+| Local API | sources.json, settings.json, history.json | Atomic writes; up to 50 accepted answers |
+| Connections | .env, connections.json | Local keys; private file permissions; no key readback |
+| Study library | materials.json | 100 generated items, at most 8 MiB |
+| Review dashboard | progress.json | Latest 100 question results |
+| Active test | Service memory | Hidden solutions and immutable source snapshot |
+| Word exporter | Downloaded .docx | Editable OOXML text and vector diagram with text equivalent |
+| Browser print view | PDF | User selects Save as PDF; diagram and expanded cards included |
+| Rich clipboard | OneNote | Paste formatted text and diagram into a page; no account integration |
 
-The application data folder is `%APPDATA%\StudyCoach` on Windows, `$XDG_DATA_HOME/study-coach` or `~/.local/share/study-coach` on Linux, and `~/Library/Application Support/StudyCoach` on macOS. The installation folder is separate. Unix data directories use mode `0700` and new files `0600`. Fresh Windows directories receive a restricted ACL; existing directories keep their owner's ACL policy. This file storage is not an encrypted secret manager.
+Application data lives in `%APPDATA%\StudyCoach` on Windows, `$XDG_DATA_HOME/study-coach` or `~/.local/share/study-coach` on Linux, and `~/Library/Application Support/StudyCoach` on macOS. Installation files remain separate. An operating-system lock prevents competing app instances from overwriting the same folder. New Windows directories receive a restricted ACL; Unix directories use 0700 and files 0600.
 
-An operating system file lock is acquired before loading application state and retained for the service lifetime. A second launch for the same data folder is refused, preventing cached copies from overwriting each other. The lock releases when the process exits, including a crash. Its empty lock file is intentionally retained.
-
-## Guardrails and failure paths
-
-The browser sends a random local session token for mutations. The service checks Host and Origin, limits headers and bodies, blocks path traversal, and serves a restrictive Content Security Policy. Only IPv4 loopback is bound. A local malicious process running as the same account is outside this session token boundary; this is not a remote multiuser deployment.
-
-Empty or punctuation only questions receive a local clarification. Other valid questions call the selected model. Missing keys, quota errors, unavailable models, timeouts, and unverified quotations return actionable messages. There is no paid or automatic provider fallback. Changing a connection requires a user action.
-
-The service accepts at most 64 sources totaling 180 KiB, each source text at most 16 KiB and title at most 160 UTF8 bytes. Questions are limited to 4,000 UTF8 bytes. The default sends the full collection. `--context retrieval` uses the same lexical selection function as the retrieval evaluator, without expected answers or grading criteria. It is a basic retrieval alternative rather than semantic search or an embedding database. Plain text and Markdown import does not extract PDFs, Office files, images, or audio.
-
-The evaluation intentionally scores the raw shared core response. Application checks additionally suppress unsafe output instead of showing it. A strict evaluation pass satisfies the exact quotation conditions, but a failure may represent a withheld answer, a valid paraphrase rejected by the rubric, or a task completion error. Reports distinguish those outcomes.
+The historical CLI evaluator retains frozen cases, prompts, scoring and raw results. Application checks are additional guards, not retroactive changes to evaluation scores. Exact quotation checks prove a passage occurs in a source; they do not prove semantic support or assessment quality. Provider quotas and account billing remain account-specific.

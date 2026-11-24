@@ -1,0 +1,13 @@
+{
+  "fixture": true,
+  "quiz_source_ids": [
+    "S2"
+  ],
+  "material_source_ids": [
+    "S1"
+  ],
+  "default_all": true,
+  "empty_selection_rejected": true,
+  "phone_overflow": false,
+  "page_errors": []
+}

@@ -1,0 +1,255 @@
+{
+  "desktop_overflow": false,
+  "phone": {
+    "page_overflow": false,
+    "wrapper_scrolls": true,
+    "svg_width": 1000
+  },
+  "text_bounds": [
+    {
+      "text": "Study Coach",
+      "x": 48,
+      "y": 21,
+      "width": 185.875,
+      "height": 43
+    },
+    {
+      "text": "Local study workspace",
+      "x": 48,
+      "y": 70,
+      "width": 197.578125,
+      "height": 27
+    },
+    {
+      "text": "Browser workspace",
+      "x": 444,
+      "y": 46,
+      "width": 209.44140625,
+      "height": 32
+    },
+    {
+      "text": "Notes / tests / library / review",
+      "x": 444,
+      "y": 89,
+      "width": 236.4248046875,
+      "height": 24
+    },
+    {
+      "text": "Bounded import",
+      "x": 72,
+      "y": 238,
+      "width": 180,
+      "height": 32
+    },
+    {
+      "text": "Office, text and captions",
+      "x": 72,
+      "y": 281,
+      "width": 192.6845703125,
+      "height": 24
+    },
+    {
+      "text": "Windows PDF / image OCR",
+      "x": 71,
+      "y": 313,
+      "width": 217.1279296875,
+      "height": 24
+    },
+    {
+      "text": "Editable preview",
+      "x": 72,
+      "y": 347,
+      "width": 116.2265625,
+      "height": 21
+    },
+    {
+      "text": "Local API",
+      "x": 444,
+      "y": 238,
+      "width": 99.890625,
+      "height": 32
+    },
+    {
+      "text": "Loopback / Host / Origin / token",
+      "x": 444,
+      "y": 281,
+      "width": 259.375,
+      "height": 24
+    },
+    {
+      "text": "Validation and state ownership",
+      "x": 443,
+      "y": 313,
+      "width": 245.015625,
+      "height": 24
+    },
+    {
+      "text": "Embedded browser assets",
+      "x": 444,
+      "y": 347,
+      "width": 184.1796875,
+      "height": 21
+    },
+    {
+      "text": "Study engine",
+      "x": 864,
+      "y": 238,
+      "width": 142.796875,
+      "height": 32
+    },
+    {
+      "text": "Private quiz solutions / grading",
+      "x": 864,
+      "y": 281,
+      "width": 247.34375,
+      "height": 24
+    },
+    {
+      "text": "Notes, cards and memory aids",
+      "x": 864,
+      "y": 313,
+      "width": 240.751953125,
+      "height": 24
+    },
+    {
+      "text": "Shared bounded transport",
+      "x": 864,
+      "y": 347,
+      "width": 187.2265625,
+      "height": 21
+    },
+    {
+      "text": "Chosen model",
+      "x": 1264,
+      "y": 238,
+      "width": 155.984375,
+      "height": 32
+    },
+    {
+      "text": "HTTPS cloud provider",
+      "x": 1264,
+      "y": 281,
+      "width": 172.884765625,
+      "height": 24
+    },
+    {
+      "text": "or loopback local service",
+      "x": 1264,
+      "y": 313,
+      "width": 195.390625,
+      "height": 24
+    },
+    {
+      "text": "No automatic fallback",
+      "x": 1264,
+      "y": 347,
+      "width": 155.546875,
+      "height": 21
+    },
+    {
+      "text": "Local storage",
+      "x": 444,
+      "y": 542,
+      "width": 144.82421875,
+      "height": 32
+    },
+    {
+      "text": "Sources, history and materials",
+      "x": 444,
+      "y": 585,
+      "width": 236.6650390625,
+      "height": 24
+    },
+    {
+      "text": "Progress, settings, connections",
+      "x": 444,
+      "y": 617,
+      "width": 244.28515625,
+      "height": 24
+    },
+    {
+      "text": "Process lock; no key readback",
+      "x": 444,
+      "y": 651,
+      "width": 210.75,
+      "height": 21
+    },
+    {
+      "text": "Output guard",
+      "x": 864,
+      "y": 542,
+      "width": 148.6875,
+      "height": 32
+    },
+    {
+      "text": "Complete schemas and quizzes",
+      "x": 864,
+      "y": 585,
+      "width": 248.486328125,
+      "height": 24
+    },
+    {
+      "text": "Credential / quotation checks",
+      "x": 864,
+      "y": 617,
+      "width": 233.755859375,
+      "height": 24
+    },
+    {
+      "text": "Errors leave answers ungraded",
+      "x": 864,
+      "y": 651,
+      "width": 215.21875,
+      "height": 21
+    },
+    {
+      "text": "Document output",
+      "x": 1264,
+      "y": 542,
+      "width": 194.58984375,
+      "height": 32
+    },
+    {
+      "text": "Editable Word with diagrams",
+      "x": 1264,
+      "y": 585,
+      "width": 229.2734375,
+      "height": 24
+    },
+    {
+      "text": "Browser PDF / OneNote copy",
+      "x": 1264,
+      "y": 617,
+      "width": 232.8046875,
+      "height": 24
+    },
+    {
+      "text": "Source text remains editable",
+      "x": 1264,
+      "y": 651,
+      "width": 200.40625,
+      "height": 21
+    },
+    {
+      "text": "LOCAL USER BOUNDARY / Private credentials and quiz solutions stay in the service",
+      "x": 48,
+      "y": 737,
+      "width": 654.984375,
+      "height": 24
+    },
+    {
+      "text": "Dashed boundary: local data. Dashed model box: explicitly configured inference service.",
+      "x": 48,
+      "y": 805,
+      "width": 694.15234375,
+      "height": 24
+    },
+    {
+      "text": "Quotation checks verify source text; they do not guarantee explanation or grading quality.",
+      "x": 48,
+      "y": 835,
+      "width": 633.765625,
+      "height": 21
+    }
+  ]
+}

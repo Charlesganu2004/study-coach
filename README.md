@@ -1,22 +1,32 @@
-# Source grounded study coach
+# Study Coach
 
 A Rust study coach answers questions from supplied course notes, quotes its evidence, and compares free hosted models with a reproducible evaluation.
 
-This is a standalone project with its own Git repository. Local folder: `C:\Users\Charl\Downloads\study-coach-rust`. The class repository remains separate.
+## Study workspace upgrade
 
-GitHub repository: [Charlesganu2004/study-coach-rust](https://github.com/Charlesganu2004/study-coach-rust) (private).
+The illustrated workspace scales to native 4K and 5K. The book, recall cards and orbital paths move independently. Turn motion off in the top bar or use your device's reduced-motion setting. [5K workspace](docs/demo/upgrade-checks/5k-study.png)
+
+Create practice tests with 1 to 30 questions: multiple choice, open response, fill in the blank, or a typed custom format. Tests open a dedicated screen with hidden solutions, green correct feedback, yellow partial feedback with retries, red wrong/revealed answers, and a review list based on saved attempts.
+
+Import text, Markdown, CSV/TSV, DOCX, PPTX, XLSX, PDF, screenshots and captions into editable source previews. Windows native extraction/OCR handles Office documents, PDFs and images. Videos use a supplied transcript or embedded captions when FFmpeg is installed; automatic speech transcription is not included. Choose or type note styles and document types, then save study notes with relationship diagrams, flashcards, or original acronym/song-text memory aids.
+
+Download editable Word documents with diagrams, save the printable document as PDF, or copy formatted content for pasting into OneNote. Connections lists bundled models and six service templates, with add/select/remove for custom OpenAI-compatible model IDs and endpoints. Provider account access and charges depend on the selected service.
+
+See [architecture and trust boundaries](docs/ARCHITECTURE.md), [upgrade plan](docs/UPGRADE_PLAN.md), and [verification](docs/UPGRADE_VERIFICATION.md). The [updated walkthrough](docs/demo/study-coach-upgrade.webm) uses a visibly labelled local model fixture; it demonstrates the interface and actual local transport, not cloud-model quality. The original real-cloud demonstration remains in the recorded-demo section below.
+
+The application source is public. [Study Coach on GitHub](https://github.com/Charlesganu2004/study-coach)
 
 Milestone 1 evaluation is complete locally: 50 examples, three runs per model, 450 unique completed API responses, measured scores/latency, conditional cost reporting within free quotas, and saved evidence. **Selected model: Groq `openai/gpt-oss-120b`**, with 85.33% strict passes and mean latency of 0.899 seconds for completed calls. See [REPORT.md](REPORT.md) for all results, failure analyses, limitations, and remaining submission steps.
 
 ## Install the application
 
-The application has a browser interface, saved notes, exact source quotations, question history, and a local connection screen. The Windows package includes the compiled Rust service; people installing it do not need Rust. Extract `StudyCoach-0.1.1-x86_64-pc-windows-gnu.zip`, then double click `StartStudyCoach.cmd`, or run `install.ps1` from the extracted folder for a normal installation for your account. [Installation and removal instructions](docs/INSTALL.md) cover the portable package, Linux and macOS source installation, and building a package yourself.
+Download and extract the [Windows ZIP](https://github.com/Charlesganu2004/study-coach/releases/download/v0.2.0/StudyCoach-0.2.0-x86_64-pc-windows-gnu.zip). Open the extracted folder and double-click `StartStudyCoach.cmd`. It starts the included service and opens Study Coach in your browser. For a Start menu shortcut, run `.\install.ps1` inside that folder. [Installation and removal guide](docs/INSTALL.md)
 
 Use the X labelled **Close Study Coach** at the top right to stop the app. If an answer is running, closing waits for it to finish. Saved notes, history, settings, and keys remain available when you reopen the launcher. If the browser keeps the closed page open, close that tab with `Ctrl+W`. The X remains visible when browser controls are hidden.
 
 First launch creates a separate application data folder and a blank `.env` file. Open **Connections**, choose a model, paste your own key, and save. Keys are never included in the package or returned to the browser. The local credential file is not an encrypted secret vault. Existing project keys are not automatically copied into an installation.
 
-Use **My notes** to paste material or import `.txt` and `.md` files. Ask a question in **Study**, inspect the original quotation, and revisit saved answers in **Past questions**. Source text is sent to the chosen cloud provider only when you ask. Free access is subject to account quotas; no keyless cloud answer service is connected.
+Use **My notes** to import your course material, check the extracted text, and save it. In **Practice test**, select the sources, question format and length for a test. In **Study materials**, choose the sources, output type and study style. Generation and free-text grading can send the relevant material to your selected model. Account quotas apply to hosted models.
 
 Developers can start the same interface from source:
 
@@ -97,7 +107,7 @@ Model output has this schema:
 }
 ```
 
-Allowed statuses are `answer`, `clarify`, and `abstain`. Clarification and abstention require an empty citation array. The application sends its current complete note collection by default; `--context retrieval` enables the lexical selector measured in Milestone 2. The evaluation uses the fixed bundled collection. Plain text import is supported; PDF extraction and embeddings are not implemented.
+Allowed statuses are `answer`, `clarify`, and `abstain`. Clarification and abstention require an empty citation array. The application sends its current complete note collection by default; `--context retrieval` enables the lexical selector measured in Milestone 2. The evaluation uses the fixed bundled collection. Rich source import is described above; embeddings are not implemented.
 
 ## Run the full evaluation in one command
 
@@ -179,7 +189,7 @@ Browser checks are real Playwright code in [tests/ui-smoke.mjs](tests/ui-smoke.m
 
 [Watch the three minute screen recording](docs/demo/study-coach-demo.mp4), with visible captions and [downloadable subtitles](docs/demo/demo.srt). It shows a real model request through the application, exact evidence, bad input, source creation, history, and local key setup without displaying keys. [The transcript](docs/demo/TRANSCRIPT.md) documents actual timings. [The architecture](docs/ARCHITECTURE.md) shows the whole application.
 
-Use [the alpha snapshot](https://github.com/Charlesganu2004/study-coach-rust/tree/alpha) for the milestone submission. [Peer review status](docs/PEER_REVIEW.md) distinguishes completed outgoing feedback from the missing incoming author response. The backup video does not replace the student's classroom demo or observations of classmates.
+Use [the alpha snapshot](https://github.com/Charlesganu2004/study-coach/tree/alpha) for the milestone submission. [Peer review status](docs/PEER_REVIEW.md) links Charles’s two outgoing reviews and his submitted response to James. The backup video does not replace the student's classroom demo or observations of classmates.
 
 The commit helper checks the Git account and stored commit identity, excludes credentials, and refuses incomplete comparison evidence. Review its changes before running it:
 
@@ -192,6 +202,6 @@ The second command commits, creates the `alpha` tag without overwriting an exist
 
 ## Scope and limitations
 
-The latest project choice replaces the earlier direction of explaining programming errors in the separate class proposal. Hosted APIs send the supplied notes and question to the selected provider. This is **not offline or private local inference**; bundled notes and cases are original synthetic material.
+Hosted models receive the notes and prompt needed for each request. A local OpenAI-compatible service can process requests on your own machine. Bundled notes and evaluation cases use original synthetic material.
 
 The automatic rubric detects required phrases and verifies exact source quotations. It cannot prove that a quotation supports the answer or catch every contradiction. Review real outputs before making claims about learning quality. This is a development set; reserve unseen examples for final evaluation. See [dataset documentation](data/DATASET.md).

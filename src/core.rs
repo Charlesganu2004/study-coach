@@ -84,6 +84,10 @@ fn provider_details(name: &str) -> Result<Provider, String> {
 
 fn validate(settings: &Settings) -> Result<(), String> {
     provider_details(&settings.provider)?;
+    validate_generation(settings)
+}
+
+fn validate_generation(settings: &Settings) -> Result<(), String> {
     prompt_fingerprint_material(&settings.approach)?;
     if settings.model.trim().is_empty() || settings.model.len() > 256 {
         return Err("Model ID must contain between 1 and 256 bytes.".into());
@@ -101,6 +105,77 @@ fn validate(settings: &Settings) -> Result<(), String> {
         return Err("retries must be between 0 and 3.".into());
     }
     Ok(())
+}
+
+// Custom endpoints are deliberately narrower than curl's URL grammar. In
+// particular, credentials and plaintext remote URLs must never be accepted.
+pub(crate) fn validate_endpoint(endpoint: &str) -> Result<bool, String> {
+    let invalid = || {
+        "Use an HTTPS endpoint, or an HTTP loopback endpoint, without credentials, query parameters, or fragments.".to_owned()
+    };
+    if endpoint.len() > 2048
+        || !endpoint.is_ascii()
+        || endpoint
+            .chars()
+            .any(|ch| ch.is_whitespace() || ch.is_control())
+        || endpoint.contains(['@', '?', '#', '\\', '%', '"', '\''])
+    {
+        return Err(invalid());
+    }
+    let (secure, rest) = if let Some(rest) = endpoint.strip_prefix("https://") {
+        (true, rest)
+    } else if let Some(rest) = endpoint.strip_prefix("http://") {
+        (false, rest)
+    } else {
+        return Err(invalid());
+    };
+    let authority = rest.split('/').next().ok_or_else(invalid)?;
+    let (host, port) = if let Some(bracketed) = authority.strip_prefix('[') {
+        let (host, suffix) = bracketed.split_once(']').ok_or_else(invalid)?;
+        if host.parse::<std::net::Ipv6Addr>().is_err() {
+            return Err(invalid());
+        }
+        let port = if suffix.is_empty() {
+            None
+        } else {
+            Some(suffix.strip_prefix(':').ok_or_else(invalid)?)
+        };
+        (host, port)
+    } else {
+        let (host, port) = authority
+            .split_once(':')
+            .map_or((authority, None), |(host, port)| (host, Some(port)));
+        if host.is_empty()
+            || host.len() > 253
+            || host.split('.').any(|part| {
+                part.is_empty()
+                    || part.len() > 63
+                    || part.starts_with('-')
+                    || part.ends_with('-')
+                    || !part
+                        .bytes()
+                        .all(|byte| byte.is_ascii_alphanumeric() || byte == b'-')
+            })
+        {
+            return Err(invalid());
+        }
+        (host, port)
+    };
+    if port.is_some_and(|value| {
+        value.is_empty()
+            || !value.bytes().all(|byte| byte.is_ascii_digit())
+            || value.parse::<u16>().map_or(true, |port| port == 0)
+    }) {
+        return Err(invalid());
+    }
+    let loopback = host.eq_ignore_ascii_case("localhost")
+        || host
+            .parse::<std::net::IpAddr>()
+            .is_ok_and(|address| address.is_loopback());
+    if !secure && !loopback {
+        return Err(invalid());
+    }
+    Ok(loopback)
 }
 
 fn build_payload(input: &str, notes: &Value, settings: &Settings) -> Result<Value, String> {
@@ -166,7 +241,8 @@ fn request(
     payload: &Value,
     timeout_seconds: u64,
 ) -> Result<(u16, Vec<u8>), String> {
-    if key.is_empty()
+    let loopback = validate_endpoint(endpoint)?;
+    if (key.is_empty() && !loopback)
         || key.len() > 4096
         || key.chars().any(char::is_whitespace)
         || !key.is_ascii()
@@ -174,15 +250,36 @@ fn request(
     {
         return Err("API key is empty or has invalid characters; configure it locally.".into());
     }
+    let authorization = if key.is_empty() {
+        String::new()
+    } else {
+        format!(
+            "header = {}\n",
+            config_quote(&format!("Authorization: Bearer {key}"))
+        )
+    };
     let config = format!(
-        "url = {}\nrequest = \"POST\"\nheader = \"Content-Type: application/json\"\nheader = {}\ndata-binary = {}\n",
+        "url = {}\nrequest = \"POST\"\nheader = \"Content-Type: application/json\"\n{}data-binary = {}\n",
         config_quote(endpoint),
-        config_quote(&format!("Authorization: Bearer {key}")),
+        authorization,
         config_quote(&payload.to_string())
     );
     let executable = if cfg!(windows) { "curl.exe" } else { "curl" };
     let mut child = Command::new(executable)
-        .args(["--disable", "--config", "-", "--silent", "--no-location"])
+        .args([
+            "--disable",
+            "--config",
+            "-",
+            "--silent",
+            "--no-location",
+            "--globoff",
+        ])
+        .args(["--proto", "=http,https"])
+        .args(if loopback {
+            &["--noproxy", "*"][..]
+        } else {
+            &[][..]
+        })
         .args(["--max-time", &timeout_seconds.to_string()])
         .args(["--connect-timeout", &timeout_seconds.min(20).to_string()])
         .args(["--max-filesize", &MAX_RESPONSE_BYTES.to_string()])
@@ -308,10 +405,37 @@ pub fn answer(input: &str, notes: &Value, settings: &Settings) -> Result<Complet
             provider.key_env
         )
     })?;
+    complete(input, notes, settings, provider.endpoint, &key)
+}
+
+/// Send a request only to the endpoint explicitly chosen in a saved connection.
+/// Historical Groq/NVIDIA evaluation profiles continue through `answer`.
+pub fn answer_with_connection(
+    input: &str,
+    notes: &Value,
+    settings: &Settings,
+    endpoint: &str,
+    key: &str,
+) -> Result<Completion, String> {
+    if settings.provider != "openai-compatible" {
+        return Err("Explicit connections require an OpenAI-compatible profile.".into());
+    }
+    validate_generation(settings)?;
+    validate_endpoint(endpoint)?;
+    complete(input, notes, settings, endpoint, key)
+}
+
+fn complete(
+    input: &str,
+    notes: &Value,
+    settings: &Settings,
+    endpoint: &str,
+    key: &str,
+) -> Result<Completion, String> {
     let payload = build_payload(input, notes, settings)?;
     let started = Instant::now();
     for attempt in 1..=settings.retries + 1 {
-        let (status, body) = request(provider.endpoint, &key, &payload, settings.timeout_seconds)?;
+        let (status, body) = request(endpoint, key, &payload, settings.timeout_seconds)?;
         if (200..300).contains(&status) {
             return decode_completion(&body, started.elapsed().as_secs_f64() * 1000.0, attempt);
         }
@@ -498,6 +622,160 @@ mod tests {
         .unwrap_err();
         assert!(error.contains("invalid characters"));
         assert!(!error.contains("Injected"));
+    }
+
+    #[test]
+    fn endpoint_validation_rejects_ambiguous_or_credential_bearing_urls() {
+        for endpoint in [
+            "https://api.openai.com/v1/chat/completions",
+            "https://models.example.org:443/v1/chat/completions",
+            "http://127.0.0.1:11434/v1/chat/completions",
+            "http://[::1]:1234/v1/chat/completions",
+            "http://localhost:11434/v1/chat/completions",
+        ] {
+            assert!(validate_endpoint(endpoint).is_ok(), "{endpoint}");
+        }
+        for endpoint in [
+            "http://models.example.org/v1/chat/completions",
+            "file:///etc/passwd",
+            "https://user:secret@example.org/v1",
+            "https://example.org/v1?api_key=secret",
+            "https://example.org/v1#secret",
+            "https://example.org\\@127.0.0.1/v1",
+            "http://127.1/v1",
+            "http://2130706433/v1",
+            "http://127.0.0.1.evil.example/v1",
+            "https://example.org:0/v1",
+            "https://example.org:65536/v1",
+            "https://example.org:\n443/v1",
+            "https://example.org/%0a/v1",
+            "https://[::1]evil/v1",
+            "https:///v1",
+            "https://example..org/v1",
+        ] {
+            assert!(validate_endpoint(endpoint).is_err(), "{endpoint}");
+        }
+        assert!(request(
+            "https://models.example.org/v1/chat/completions",
+            "",
+            &json!({}),
+            1
+        )
+        .is_err());
+        assert!(answer_with_connection(
+            "Question?",
+            &notes(),
+            &settings("groq"),
+            "http://127.0.0.1:1/chat",
+            ""
+        )
+        .is_err());
+    }
+
+    #[test]
+    fn explicit_connection_uses_real_transport_and_omits_empty_local_authorization() {
+        let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+        let address = listener.local_addr().unwrap();
+        let server = thread::spawn(move || {
+            let (mut stream, _) = listener.accept().unwrap();
+            stream
+                .set_read_timeout(Some(Duration::from_secs(5)))
+                .unwrap();
+            let mut received = Vec::new();
+            let mut buffer = [0u8; 2048];
+            let body_start;
+            loop {
+                let count = stream.read(&mut buffer).unwrap();
+                assert_ne!(count, 0);
+                received.extend_from_slice(&buffer[..count]);
+                if let Some(position) = received.windows(4).position(|window| window == b"\r\n\r\n")
+                {
+                    body_start = position + 4;
+                    break;
+                }
+                assert!(received.len() < 16384);
+            }
+            let headers = String::from_utf8(received[..body_start].to_vec()).unwrap();
+            assert!(headers.starts_with("POST /v1/chat/completions HTTP/1.1\r\n"));
+            assert!(!headers.to_lowercase().contains("authorization:"));
+            let length = headers
+                .lines()
+                .find_map(|line| {
+                    let (name, value) = line.split_once(':')?;
+                    name.eq_ignore_ascii_case("content-length")
+                        .then(|| value.trim().parse::<usize>().unwrap())
+                })
+                .unwrap();
+            while received.len() < body_start + length {
+                let count = stream.read(&mut buffer).unwrap();
+                assert_ne!(count, 0);
+                received.extend_from_slice(&buffer[..count]);
+            }
+            let payload: Value =
+                serde_json::from_slice(&received[body_start..body_start + length]).unwrap();
+            assert_eq!(payload["model"], "local-model:8b");
+            assert_eq!(payload["max_tokens"], 1024);
+            let user: Value =
+                serde_json::from_str(payload["messages"][1]["content"].as_str().unwrap()).unwrap();
+            assert_eq!(user["question"], "What do tests check?");
+            assert_eq!(user["sources"][0]["id"], "S1");
+            let response = json!({"choices":[{"message":{"content":json!({"status":"answer","answer":"Tests check behavior.","citations":[{"source_id":"S1","quote":"Tests check behavior."}]}).to_string()}}]}).to_string();
+            write!(
+                stream,
+                "HTTP/1.1 200 OK\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{}",
+                response.len(),
+                response
+            )
+            .unwrap();
+        });
+        let mut configuration = settings("openai-compatible");
+        configuration.model = "local-model:8b".into();
+        let completion = answer_with_connection(
+            "What do tests check?",
+            &notes(),
+            &configuration,
+            &format!("http://{address}/v1/chat/completions"),
+            "",
+        )
+        .unwrap();
+        server.join().unwrap();
+        assert_eq!(
+            completion.parsed.unwrap()["answer"],
+            "Tests check behavior."
+        );
+        assert_eq!(completion.attempts, 1);
+    }
+
+    #[test]
+    fn custom_transport_never_follows_redirects() {
+        let destination = TcpListener::bind("127.0.0.1:0").unwrap();
+        destination.set_nonblocking(true).unwrap();
+        let destination_address = destination.local_addr().unwrap();
+        let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+        let address = listener.local_addr().unwrap();
+        let server = thread::spawn(move || {
+            let (mut stream, _) = listener.accept().unwrap();
+            stream
+                .set_read_timeout(Some(Duration::from_secs(5)))
+                .unwrap();
+            let mut bytes = [0u8; 4096];
+            assert!(stream.read(&mut bytes).unwrap() > 0);
+            write!(stream, "HTTP/1.1 302 Found\r\nLocation: http://{destination_address}/stolen\r\nContent-Length: 0\r\nConnection: close\r\n\r\n").unwrap();
+        });
+        let (status, body) = request(
+            &format!("http://{address}/chat"),
+            "test-local-only-key",
+            &json!({}),
+            5,
+        )
+        .unwrap();
+        server.join().unwrap();
+        assert_eq!(status, 302);
+        assert!(body.is_empty());
+        assert_eq!(
+            destination.accept().unwrap_err().kind(),
+            std::io::ErrorKind::WouldBlock
+        );
     }
 
     #[test]

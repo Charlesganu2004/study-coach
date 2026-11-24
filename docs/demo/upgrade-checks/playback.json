@@ -1,0 +1,12 @@
+{
+  "codec_name": "vp9",
+  "codec_type": "video",
+  "width": 3840,
+  "height": 2160,
+  "duration_seconds": 150.04,
+  "decoded_frames": 155,
+  "chapters": 24,
+  "audio_tracks": 0,
+  "average_encoded_fps": 1.03,
+  "median_interframe_ms": 80.0
+}

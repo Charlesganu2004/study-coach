@@ -1,0 +1,167 @@
+{
+  "recorded_at": "2026-11-24T23:19:03.961Z",
+  "file": "study-coach-upgrade.webm",
+  "format": "video/webm;codecs=vp9",
+  "width": 3840,
+  "height": 2160,
+  "capture_surface": "native browser screenshots from completed product interactions",
+  "duration_seconds": 150.04,
+  "size_bytes": 5194354,
+  "actual_rust_service": true,
+  "actual_curl_transport": true,
+  "model_fixture": "Local demonstration fixture",
+  "cloud_requests": false,
+  "desktop_capture": false,
+  "audio_capture": false,
+  "provider_calls": 8,
+  "browser_errors": [],
+  "chapters": [
+    {
+      "start": 0.0,
+      "end": 7.0,
+      "title": "Study Coach: an upgraded study workspace",
+      "caption": "This walkthrough uses a deterministic local model fixture. Every answer still travels through the real application service and its model transport."
+    },
+    {
+      "start": 7.0,
+      "end": 12.0,
+      "title": "Choose a connection",
+      "caption": "Connections lists the built-in models and supported provider templates. A custom endpoint lets you connect another OpenAI-compatible model."
+    },
+    {
+      "start": 12.0,
+      "end": 19.0,
+      "title": "Add a model connection",
+      "caption": "The visible connection name identifies the local demonstration fixture. No cloud account, real API key, or billing is used in this recording."
+    },
+    {
+      "start": 19.0,
+      "end": 25.0,
+      "title": "Save and select your study model",
+      "caption": "Saved connections show their model, endpoint, and readiness. Use model selects the connection for study, tests, and materials."
+    },
+    {
+      "start": 25.0,
+      "end": 32.0,
+      "title": "Import your source material",
+      "caption": "Import a document or screenshot, review the extracted text, then save it. This example imports original Markdown notes; videos require captions or a transcript."
+    },
+    {
+      "start": 32.0,
+      "end": 37.0,
+      "title": "Keep notes in your local workspace",
+      "caption": "The preview becomes a saved source only after Save source. Longer text imports are split into bounded source passages."
+    },
+    {
+      "start": 37.0,
+      "end": 44.0,
+      "title": "Ask a question from your notes",
+      "caption": "Study uses the selected connection. The original source quotation appears beside the answer so you can inspect its evidence."
+    },
+    {
+      "start": 44.0,
+      "end": 50.0,
+      "title": "Read the source, then check your understanding",
+      "caption": "This response is visibly labelled as a local fixture. The service verified its quotation against the saved notes before displaying it."
+    },
+    {
+      "start": 50.0,
+      "end": 56.0,
+      "title": "Build a practice test",
+      "caption": "Choose open response, multiple choice, fill in the blank, or a custom format. Choose one to thirty questions; larger tests are generated in smaller batches."
+    },
+    {
+      "start": 56.0,
+      "end": 62.0,
+      "title": "Answer one question at a time",
+      "caption": "Starting a test opens a focused question screen. Expected answers and solutions remain on the service until assessment or an explicit reveal."
+    },
+    {
+      "start": 62.0,
+      "end": 69.0,
+      "title": "Yellow: close, with another attempt",
+      "caption": "A partly correct explanation turns the test yellow and offers Try again. The solution remains hidden while you refine the answer."
+    },
+    {
+      "start": 69.0,
+      "end": 76.0,
+      "title": "Green: correct, with the reasoning",
+      "caption": "A complete explanation turns the test green. A semantically correct paraphrase is accepted, and the source-supported solution becomes visible."
+    },
+    {
+      "start": 76.0,
+      "end": 83.0,
+      "title": "Red: review an incorrect answer",
+      "caption": "An incorrect answer turns the test red, locks that outcome, and shows the solution and exact source passage for review."
+    },
+    {
+      "start": 83.0,
+      "end": 89.0,
+      "title": "See solution records a question to revisit",
+      "caption": "Reveal is also red. Looking at a solution does not count as answering correctly; the recorded outcome stays fixed."
+    },
+    {
+      "start": 89.0,
+      "end": 94.0,
+      "title": "Finish with a review list",
+      "caption": "The summary lists the result of each question. The topic review list is saved locally so you can return to ideas that need practice."
+    },
+    {
+      "start": 94.0,
+      "end": 101.0,
+      "title": "Create notes in your preferred style",
+      "caption": "Choose concise, detailed, Cornell, outline, study guide, or custom notes. Document type and instructions are saved with the material."
+    },
+    {
+      "start": 101.0,
+      "end": 108.0,
+      "title": "Keep editable notes and a source-supported diagram",
+      "caption": "Generated sections, the relationship diagram, and exact source passages stay together in your local library."
+    },
+    {
+      "start": 108.0,
+      "end": 113.0,
+      "title": "Download an editable Word document",
+      "caption": "The Word export contains native editable text, source passages, and a vector diagram. It is a real document download from the Rust service."
+    },
+    {
+      "start": 113.0,
+      "end": 119.0,
+      "title": "Open the print view to save as PDF",
+      "caption": "Save as PDF opens a clean printable view with notes, all flashcard answers, diagrams, and source passages. Choose Save as PDF in the print dialog."
+    },
+    {
+      "start": 119.0,
+      "end": 124.0,
+      "title": "Bring the notes into OneNote",
+      "caption": "Copy for OneNote prepares rich notes and the diagram. If browser clipboard access is blocked, a downloadable HTML file provides a manual copy-and-paste path."
+    },
+    {
+      "start": 124.0,
+      "end": 131.0,
+      "title": "Use flashcards for active recall",
+      "caption": "Create five flashcards from the same source collection. Open a card only after trying to recall the answer yourself."
+    },
+    {
+      "start": 131.0,
+      "end": 138.0,
+      "title": "Make an original mnemonic or study song",
+      "caption": "Memory aids map each letter or lyric back to a source fact. This feature creates original text; it does not generate audio."
+    },
+    {
+      "start": 138.0,
+      "end": 144.0,
+      "title": "Return to the ideas worth practicing",
+      "caption": "Your review list distinguishes correct attempts from topics to revisit. Saved notes, generated materials, connections, and progress survive reopening the app."
+    },
+    {
+      "start": 144.0,
+      "end": 150.04,
+      "title": "Study Coach: connect, practice, and keep the evidence",
+      "caption": "The recorded model responses are deterministic local fixtures. Real account availability, model behavior, and cloud quotas are not claimed by this demonstration."
+    }
+  ],
+  "encoded_frames": 155,
+  "average_encoded_fps": 1.03,
+  "chapter_times": "decoded visual progress bar"
+}

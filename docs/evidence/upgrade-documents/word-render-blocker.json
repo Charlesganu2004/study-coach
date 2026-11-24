@@ -1,0 +1,13 @@
+{
+  "status": "BLOCKED",
+  "renderer": "Microsoft Word 16.0 COM",
+  "operation": "Documents.Open read-only",
+  "timeout_seconds": 283.2,
+  "pdf_outputs": 0,
+  "owned_processes_stopped": [
+    29828,
+    43836
+  ],
+  "source": "target/document-verification/study-notes.docx",
+  "unknown": "Native Word diagram rendering, clipping and pagination could not be verified."
+}

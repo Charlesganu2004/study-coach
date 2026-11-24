@@ -1,4 +1,12 @@
-# Three minute prototype demo
+# Study Coach walkthroughs
+
+## Version 0.2.0
+
+The [4K motion preview](demo/study-coach-4k-motion.mp4) shows the landing screen's vector illustration at 30 frames per second. It samples the application's own animation timeline at fixed intervals. The longer WebM below records the interactive study session and uses variable frame timing.
+
+The [upgrade recording](demo/study-coach-upgrade.webm) follows a study session from adding a connection and importing course material through taking a test, reviewing missed answers and exporting illustrated notes. A local demonstration model supplies repeatable sample responses through the application's regular connection. [Captions](demo/study-coach-upgrade.vtt) · [Chapter transcript](demo/study-coach-upgrade-transcript.md) · [Verification](UPGRADE_VERIFICATION.md)
+
+## Original milestone demo
 
 ## Before class
 
@@ -22,4 +30,4 @@ If a provider is unavailable, show the error and explain it. Use the saved backu
 
 ## After the demo
 
-The student must actually give the demo in class and record observations of classmates: one thing that worked, one thing that broke, and one suggestion for each demo watched. Those observations are not yet known and cannot be filled in by the application. Confirm the instructor can access the private repository and the `alpha` tag before submission.
+The student must actually give the demo in class and record observations of classmates: one thing that worked, one thing that broke, and one suggestion for each demo watched. Those observations are not yet known and cannot be filled in by the application. The source repository is public. The `alpha` tag identifies the original milestone snapshot.

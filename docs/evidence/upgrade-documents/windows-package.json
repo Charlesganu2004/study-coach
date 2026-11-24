@@ -1,0 +1,29 @@
+{
+  "archive": "StudyCoach-0.2.0-x86_64-pc-windows-gnu.zip",
+  "archive_sha256": "21861c57e84a9ec63718cefc4fe60ee5f5b6b662d4565b237faed90d4be5e4f5",
+  "platform": "Windows x86_64 GNU",
+  "status": "pass",
+  "checks": [
+    "Archive contains exactly six expected program files and no credential files.",
+    "The compiled binary imports Windows system libraries only; no Rust or MinGW runtime DLL is required.",
+    "Isolated installation succeeded without a Start menu shortcut; binary hash matches.",
+    "Installed binary served bundled notes on loopback and created a blank key file in isolated app data.",
+    "A damaged package was rejected before destination creation.",
+    "Removal preserved unrelated files and the separate app data directory."
+  ],
+  "windows_runtime_dependencies": [
+    "api-ms-win-core-synch-l1-2-0.dll",
+    "bcrypt.dll",
+    "bcryptprimitives.dll",
+    "KERNEL32.dll",
+    "msvcrt.dll",
+    "ntdll.dll",
+    "USERENV.dll",
+    "WS2_32.dll"
+  ],
+  "limits": [
+    "No real provider request was made by this package test.",
+    "Linux and macOS runtime behavior was not verified by this Windows test.",
+    "Checksums detect corruption and do not authenticate a publisher."
+  ]
+}

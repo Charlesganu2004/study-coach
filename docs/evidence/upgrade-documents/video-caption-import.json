@@ -1,0 +1,12 @@
+[
+  {
+    "format": "mp4",
+    "fixture": "one second of synthetic video and one embedded text caption",
+    "caption_extracted": true
+  },
+  {
+    "format": "mkv",
+    "fixture": "one second of synthetic video and one embedded text caption",
+    "caption_extracted": true
+  }
+]

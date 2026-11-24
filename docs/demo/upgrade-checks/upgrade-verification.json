@@ -1,0 +1,144 @@
+{
+  "checked_at": "2026-11-24T00:45:36.106Z",
+  "status": "PASS",
+  "checks": [
+    "All supported provider templates are listed",
+    "Fresh app has no configured cloud keys",
+    "Custom keyless loopback model can be added and selected in UI",
+    "Connection metadata exposes readiness without credentials",
+    "Study answers traverse actual custom provider transport",
+    "Returned quotation is verified and rendered",
+    "Seven-question quiz uses bounded generation batches",
+    "Creation response withholds solution and answer rubric",
+    "Partial answer is close and withholds solution",
+    "Close answer can retry to semantically correct",
+    "Wrong answer shows solution",
+    "Reveal records incorrect and shows solution",
+    "Revealed terminal result cannot be changed to correct",
+    "Progress stores seven question outcomes rather than retry duplicates",
+    "Test opens dedicated question screen with solution hidden",
+    "Close state offers Try again while solution stays hidden",
+    "Correct feedback locks answer and displays reasoning",
+    "Correct, close and wrong feedback have distinct rendered colors",
+    "See solution is red and terminal in UI",
+    "Test summary includes all outcomes",
+    "multiple-choice question has supported structure",
+    "multiple-choice answers are assessed through the real API",
+    "fill-in-the-blank question has supported structure",
+    "fill-in-the-blank answers are assessed through the real API",
+    "custom question has supported structure",
+    "custom answers are assessed through the real API",
+    "Text import is previewed and saved through the UI",
+    "Bulk import splits long Unicode-safe source chunks",
+    "Notes and source-supported vector diagram render",
+    "Requested note style and document type persist",
+    "Actual Word download contains editable notes, citations and vector diagram",
+    "PDF action opens complete printable document",
+    "Native browser creates a real PDF artifact",
+    "OneNote/HTML export retains source passages and diagram",
+    "OneNote action reports rich copy or usable HTML fallback",
+    "Five flashcards reveal answers on interaction",
+    "Original mnemonic and song text render with source mapping",
+    "Phone study has no horizontal overflow",
+    "Phone quiz has no horizontal overflow",
+    "Phone materials has no horizontal overflow",
+    "Phone notes has no horizontal overflow",
+    "Phone settings has no horizontal overflow",
+    "4K viewport renders without horizontal overflow",
+    "Device reduced motion stops CSS animation",
+    "Custom connection and selected model survive restart",
+    "Generated materials survive restart",
+    "Quiz progress survives restart",
+    "Mock provider accepted every real request",
+    "Browser reported no runtime exceptions"
+  ],
+  "browser": "Microsoft Edge headless",
+  "actual_rust_service": true,
+  "actual_curl_transport": true,
+  "api_route_interception": false,
+  "cloud_requests": false,
+  "fixture": "Local demonstration fixture",
+  "provider_calls": [
+    {
+      "kind": "answer",
+      "model": "local-demonstration-fixture",
+      "source_count": 13
+    },
+    {
+      "kind": "quiz",
+      "model": "local-demonstration-fixture",
+      "source_count": 13
+    },
+    {
+      "kind": "quiz",
+      "model": "local-demonstration-fixture",
+      "source_count": 13
+    },
+    {
+      "kind": "grade",
+      "model": "local-demonstration-fixture",
+      "source_count": 13
+    },
+    {
+      "kind": "grade",
+      "model": "local-demonstration-fixture",
+      "source_count": 13
+    },
+    {
+      "kind": "grade",
+      "model": "local-demonstration-fixture",
+      "source_count": 13
+    },
+    {
+      "kind": "quiz",
+      "model": "local-demonstration-fixture",
+      "source_count": 13
+    },
+    {
+      "kind": "grade",
+      "model": "local-demonstration-fixture",
+      "source_count": 13
+    },
+    {
+      "kind": "grade",
+      "model": "local-demonstration-fixture",
+      "source_count": 13
+    },
+    {
+      "kind": "grade",
+      "model": "local-demonstration-fixture",
+      "source_count": 13
+    },
+    {
+      "kind": "quiz",
+      "model": "local-demonstration-fixture",
+      "source_count": 13
+    },
+    {
+      "kind": "quiz",
+      "model": "local-demonstration-fixture",
+      "source_count": 13
+    },
+    {
+      "kind": "quiz",
+      "model": "local-demonstration-fixture",
+      "source_count": 13
+    },
+    {
+      "kind": "notes",
+      "model": "local-demonstration-fixture",
+      "source_count": 16
+    },
+    {
+      "kind": "flashcards",
+      "model": "local-demonstration-fixture",
+      "source_count": 16
+    },
+    {
+      "kind": "memory",
+      "model": "local-demonstration-fixture",
+      "source_count": 16
+    }
+  ],
+  "browser_errors": []
+}

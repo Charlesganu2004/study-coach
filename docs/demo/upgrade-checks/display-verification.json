@@ -1,0 +1,44 @@
+[
+  {
+    "viewport": [
+      3840,
+      2160
+    ],
+    "canvas": [
+      3840,
+      2160
+    ],
+    "overflow": false,
+    "visibleArtwork": true,
+    "movingLayers": 2,
+    "reducedMotionStopsArtwork": true
+  },
+  {
+    "viewport": [
+      5120,
+      2880
+    ],
+    "canvas": [
+      5120,
+      2880
+    ],
+    "overflow": false,
+    "visibleArtwork": true,
+    "movingLayers": 2,
+    "reducedMotionStopsArtwork": true
+  },
+  {
+    "viewport": [
+      390,
+      844
+    ],
+    "canvas": [
+      390,
+      844
+    ],
+    "overflow": false,
+    "visibleArtwork": true,
+    "movingLayers": 2,
+    "reducedMotionStopsArtwork": true
+  }
+]

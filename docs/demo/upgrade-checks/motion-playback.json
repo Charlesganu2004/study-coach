@@ -1,0 +1,12 @@
+{
+  "width": 3840,
+  "height": 2160,
+  "avg_frame_rate": "30/1",
+  "duration": "5.000000",
+  "nb_read_frames": "150",
+  "side_data_list": [
+    {}
+  ],
+  "distinct_decoded_frames": 150,
+  "sampling": "Actual browser animation at fixed time intervals"
+}

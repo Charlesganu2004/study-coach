@@ -9,7 +9,7 @@ use std::thread;
 use std::time::{Instant, SystemTime, UNIX_EPOCH};
 use study_coach::{core, eval};
 
-const HELP: &str = "Study Coach (Rust)\n\
+const HELP: &str = "Study Coach\n\
   study-coach validate\n\
   study-coach doctor\n\
   study-coach answer --model groq-120b --question \"What is recall?\"\n\

@@ -177,7 +177,7 @@ try {
     if ([IO.Path]::GetFullPath($CoachGitRoot) -ine $CoachRoot) { throw 'Run this script from its standalone study-coach-rust repository.' }
     if ((Invoke-CoachGit -GitArguments @('branch', '--show-current') | Out-String).Trim() -cne 'main') { throw 'This script expects main and will not switch branches.' }
     $CoachRemote = (Invoke-CoachGit -GitArguments @('remote', 'get-url', 'origin') | Out-String).Trim()
-    if ($CoachRemote -notmatch '^(https://github\.com/Charlesganu2004/study-coach-rust(?:\.git)?|git@github\.com:Charlesganu2004/study-coach-rust(?:\.git)?)$') { throw 'Origin is not the expected Charlesganu2004 repository.' }
+    if ($CoachRemote -notmatch '^(https://github\.com/Charlesganu2004/study-coach(?:\.git)?|git@github\.com:Charlesganu2004/study-coach(?:\.git)?)$') { throw 'Origin is not the expected Charlesganu2004 repository.' }
     $CoachAccounts = @(Invoke-CoachGit -GitArguments @('credential-manager', 'github', 'list') | ForEach-Object { ([string]$_).Trim() })
     if ($CoachAccounts -notcontains 'Charlesganu2004') { throw 'Git Credential Manager must list Charlesganu2004 before committing.' }
     $CoachLogin = (& gh api user --jq .login | Out-String).Trim()
